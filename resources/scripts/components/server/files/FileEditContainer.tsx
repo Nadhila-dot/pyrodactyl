@@ -252,7 +252,7 @@ const FileEditContainer = () => {
                                 <DropdownMenuTrigger
                                     style={{
                                         background:
-                                            'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
+                                            'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
                                     }}
                                     className='h-[46px] px-2 py-3 border-[1px] border-[#ffffff12] rounded-r-full text-sm font-bold shadow-md'
                                 >
@@ -286,8 +286,8 @@ const FileEditContainer = () => {
                     <Can action={'file.create'}>
                         <button
                             style={{
-                                background:
-                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                    background:
+                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
                             }}
                             className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                             onClick={() => setModalVisible(true)}
