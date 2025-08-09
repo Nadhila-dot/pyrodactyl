@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+ import { useEffect } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import MainPage from '@/components/elements/MainPage';
@@ -19,7 +19,7 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey
 
     return (
         <>
-            <MainPage className={`${className || ''} max-w-[120rem] w-full mx-auto px-2 sm:px-14 py-2 sm:py-14`}>
+            <MainPage className={`${className || ''} max-w-[120rem] w-full !font-[Space Grotesk] mx-auto px-2 sm:px-14 py-2 sm:py-14`}>
                 {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
                 {children}
             </MainPage>

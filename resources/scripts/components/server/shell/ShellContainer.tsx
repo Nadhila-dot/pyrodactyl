@@ -25,6 +25,7 @@ import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
+import { IconAlertCircle } from '@tabler/icons-react';
 
 interface Egg {
     object: string;
@@ -298,6 +299,17 @@ const SoftwareContainer = () => {
 
     return (
         <ServerContentBlock title='Software'>
+            <div className='relative rounded-xl overflow-hidden shadow-md border border-red-500/30 bg-red-500/10 p-4 mb-6'>
+                <div className='flex items-center gap-3'>
+                    <IconAlertCircle className='w-5 h-5 text-red-400' />
+                    <div>
+                        <h3 className='font-medium text-red-100'>Software Management Disabled</h3>
+                        <p className='text-sm text-red-300'>
+                            The software management feature is currently unavailable. Please check back later or contact support for assistance.
+                        </p>
+                    </div>
+                </div>
+            </div>
             <MainPageHeader direction='column' title='Software'>
                 <h2 className='text-sm'>
                     Welcome to the software management page. Here you can change the game or software that is running on
@@ -324,6 +336,7 @@ const SoftwareContainer = () => {
                             <button
                                 className='rounded-full border-[1px] cursor-pointer border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-linear-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
+                                disabled={true}
                             >
                                 Change Egg
                             </button>

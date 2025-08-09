@@ -19,6 +19,7 @@ import { ServerContext } from '@/state/server';
 import { SiteSettings } from '@/state/settings';
 
 import PyrodactylProvider from './PyrodactylProvider';
+import Footer from './Footer/footer';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
@@ -114,7 +115,9 @@ const App = () => {
                                 <Route path='*' element={<NotFound />} />
                             </Routes>
                         </BrowserRouter>
+                        
                     </div>
+                    
                 </PyrodactylProvider>
             </StoreProvider>
         </>

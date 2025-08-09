@@ -15,7 +15,9 @@ import {
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { LogOut, UserCog } from "lucide-react"
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
@@ -23,17 +25,6 @@ import PermissionRoute from '@/components/elements/PermissionRoute';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import CommandMenu from '@/components/elements/commandk/CmdK';
-import HugeIconsClock from '@/components/elements/hugeicons/Clock';
-import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
-import HugeIconsConnections from '@/components/elements/hugeicons/Connections';
-import HugeIconsConsole from '@/components/elements/hugeicons/Console';
-import HugeIconsController from '@/components/elements/hugeicons/Controller';
-import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
-import HugeIconsDatabase from '@/components/elements/hugeicons/Database';
-import HugeIconsFolder from '@/components/elements/hugeicons/Folder';
-import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
-import HugeIconsPeople from '@/components/elements/hugeicons/People';
 import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
 import InstallListener from '@/components/server/InstallListener';
@@ -45,6 +36,22 @@ import http from '@/api/http';
 import getNests from '@/api/nests/getNests';
 
 import { ServerContext } from '@/state/server';
+import {
+    IconServer,
+    IconFolder,
+    IconDatabase,
+    IconCloudUp,
+    IconNetwork,
+    IconUsers,
+    IconTerminal,
+    IconClock,
+    IconSettings,
+    IconPencil,
+    IconDeviceGamepad2,
+    IconUserShield,
+    IconHome
+} from '@tabler/icons-react';
+import { Separator } from '@/components/ui/separator';
 
 const blank_egg_prefix = '@';
 
@@ -70,13 +77,6 @@ interface Nest {
         };
     };
 }
-
-/**
- * Creates a swipe event from an X and Y location at start and current co-ords.
- * Important to create a shared, but not public, space for methods.
- *
- * @class
- */
 
 const ServerRouter = () => {
     const params = useParams<'id'>();
@@ -152,14 +152,12 @@ const ServerRouter = () => {
             setDoneOnLoad(true);
         }
 
-        window.addEventListener('load', windowResize);
         window.addEventListener('resize', windowResize);
 
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
             window.removeEventListener('resize', windowResize);
-            window.removeEventListener('load', windowResize);
         };
     }, [isSidebarVisible]);
 
@@ -340,6 +338,9 @@ const ServerRouter = () => {
         return () => clearTimeout(timeoutId);
     }, [top]);
 
+    const user = window.PterodactylUser;
+    const serverName = ServerContext.useStoreState((state) => state.server.data?.name);
+
     return (
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
@@ -350,7 +351,7 @@ const ServerRouter = () => {
                 <>
                     {isSidebarVisible && (
                         <div
-                            className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-9998 transition-opacity duration-300'
+                            className='lg:hidden fixed inset-0 bg-black/60 z-9998 transition-opacity duration-300 backdrop-blur-sm'
                             onClick={() => showSideBar(false)}
                             onTouchStart={handleTouchStart}
                             onTouchMove={handleTouchMove}
@@ -360,244 +361,329 @@ const ServerRouter = () => {
 
                     <button
                         id='sidebarToggle'
-                        className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md cursor-pointer'
+                        className='lg:hidden fixed flex items-center justify-center top-5 left-5 z-50 bg-black p-3 rounded-lg text-white shadow-lg hover:bg-zinc-900 transition-colors duration-200 cursor-pointer'
                         onClick={toggleSidebar}
                         aria-label='Toggle sidebar'
                     >
                         <HugeIconsHamburger fill='currentColor' />
                     </button>
 
-                    <div className='flex flex-row w-full'>
-                        <MainSidebar
-                            ref={sidebarRef}
-                            className={`fixed inset-y-0 left-0 z-9999 w-[300px] bg-[#1a1a1a] ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} absolute backdrop-blur-xs lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
+                    <MainSidebar
+                        ref={sidebarRef}
+                        className={`fixed inset-y-0 left-0 z-9999 w-72 xl:w-80 bg-black text-white ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} lg:translate-x-0 lg:relative lg:flex lg:shrink-0 border-r border-gray-900`}
+                        style={{
+                            transform: `translate(${sidebarPosition}px)`,
+                        }}
+                    >
+                        {/* Active Route Indicator */}
+                        {/*}
+                        <div
+                            className='absolute bg-green-500 w-[2px] h-10 left-0 rounded-full pointer-events-none'
                             style={{
-                                // this is needed so we can set the positioning. If you can do it in tailwind, please do. I'm no expert - why_context
-                                transform: `translate(${sidebarPosition}px)`,
+                                top,
+                                height,
+                                opacity: top === '0' ? 0 : 1,
+                                transition:
+                                    'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                             }}
-                        >
-                            <div
-                                className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
-                                style={{
-                                    top,
-                                    height,
-                                    opacity: top === '0' ? 0 : 1,
-                                    transition:
-                                        'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                                }}
-                            />
-                            <div
-                                className='absolute bg-zinc-900 w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
-                                style={{
-                                    top,
-                                    opacity: top === '0' ? 0 : 0.5,
-                                    transition: 'all 300ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                }}
-                            />
-                            <div className='flex flex-row items-center justify-between h-8'>
-                                <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                                    <Logo />
+                        />
+                        */}
+
+                        {/* Sidebar Content */}
+                        <div className="flex flex-col h-full p-4 xl:p-5">
+                            {/* Header */}
+                            <div className='flex items-center justify-between mb-4 xl:mb-5'>
+                                <NavLink to={'/'} className='flex items-center'>
+                                    <div className="scale-100 xl:scale-105 transition-transform duration-200">
+                                        <Logo />
+                                        <Separator className="max-w-1/2 mt-4" />
+                                    </div>
                                 </NavLink>
+                            </div>
+
+                            {/* Server Info */}
+                            <div className="mb-4 xl:mb-5">
+                                <h2 className="text-xl xl:text-xl font-semibold text-white mb-1">
+                                    {serverName || 'Server'}
+                                </h2>
+                                <p className="text-gray-400 text-sm xl:text-sm">
+                                    {egg_name || 'Unknown Type'}
+                                </p>
+                            </div>
+
+                            {/* Navigation */}
+                            <nav className="flex-1">
+                                <ul className='space-y-1 xl:space-y-1.5' onClick={toggleSidebar}>
+                                    <li>
+                                        <NavLink
+                                            to={`/server/${id}`}
+                                            end
+                                            className={({ isActive }) =>
+                                                `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                    ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                    : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                }`
+                                            }
+                                            ref={NavigationHome}
+                                        >
+                                            <IconHome size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                            <span className="font-medium text-sm xl:text-sm">Home</span>
+                                        </NavLink>
+                                    </li>
+
+                                    {egg_name && !egg_name?.includes(blank_egg_prefix) && (
+                                        <>
+                                            <Can action={'file.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/files`}
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationFiles}
+                                                    >
+                                                        <IconFolder size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Files</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'database.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/databases`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationDatabases}
+                                                    >
+                                                        <IconDatabase size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Databases</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'backup.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/backups`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationBackups}
+                                                    >
+                                                        <IconCloudUp size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Backups</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'allocation.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/network`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationNetworking}
+                                                    >
+                                                        <IconNetwork size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Networking</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'user.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/users`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationUsers}
+                                                    >
+                                                        <IconUsers size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Users</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={['startup.read', 'startup.update', 'startup.docker-image']} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/startup`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationStartup}
+                                                    >
+                                                        <IconTerminal size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Startup</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'schedule.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/schedules`}
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationSchedules}
+                                                    >
+                                                        <IconClock size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Schedules</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={['settings.*', 'file.sftp']} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/settings`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationSettings}
+                                                    >
+                                                        <IconSettings size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Settings</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={['activity.*', 'activity.read']} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/activity`}
+                                                        end
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationActivity}
+                                                    >
+                                                        <IconPencil size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Activity</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+                                        </>
+                                    )}
+
+                                    <Can action={'startup.software'}>
+                                        <li>
+                                            <NavLink
+                                                to={`/server/${id}/shell`}
+                                                end
+                                                className={({ isActive }) =>
+                                                    `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                        ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                        : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                    }`
+                                                }
+                                                ref={NavigationShell}
+                                            >
+                                                <IconDeviceGamepad2 size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                <span className="font-medium text-sm xl:text-sm">Software</span>
+                                            </NavLink>
+                                        </li>
+                                    </Can>
+                                </ul>
+                            </nav>
+
+                            {/* User Profile */}
+                            <div className="mt-auto pt-4 xl:pt-5 border-t border-gray-900">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 select-none cursor-pointer'>
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                width='16'
-                                                height='15'
-                                                fill='currentColor'
-                                                viewBox='0 0 16 15'
-                                                className='flex shrink-0 h-full w-full'
-                                            >
-                                                <path d='M8.9375 7.3775C8.9375 7.56341 8.88252 7.74515 8.7795 7.89974C8.67649 8.05432 8.53007 8.1748 8.35877 8.24595C8.18746 8.31709 7.99896 8.33571 7.8171 8.29944C7.63525 8.26317 7.4682 8.17364 7.33709 8.04218C7.20598 7.91072 7.11669 7.74323 7.08051 7.56088C7.04434 7.37854 7.06291 7.18954 7.13386 7.01778C7.20482 6.84601 7.32498 6.69921 7.47915 6.59592C7.63332 6.49263 7.81458 6.4375 8 6.4375C8.24864 6.4375 8.4871 6.53654 8.66291 6.71282C8.83873 6.8891 8.9375 7.1282 8.9375 7.3775ZM1.625 6.4375C1.43958 6.4375 1.25832 6.49263 1.10415 6.59592C0.949982 6.69921 0.829821 6.84601 0.758863 7.01778C0.687906 7.18954 0.669341 7.37854 0.705514 7.56088C0.741688 7.74323 0.830976 7.91072 0.962088 8.04218C1.0932 8.17364 1.26025 8.26317 1.4421 8.29944C1.62396 8.33571 1.81246 8.31709 1.98377 8.24595C2.15507 8.1748 2.30149 8.05432 2.4045 7.89974C2.50752 7.74515 2.5625 7.56341 2.5625 7.3775C2.5625 7.1282 2.46373 6.8891 2.28791 6.71282C2.1121 6.53654 1.87364 6.4375 1.625 6.4375ZM14.375 6.4375C14.1896 6.4375 14.0083 6.49263 13.8542 6.59592C13.7 6.69921 13.5798 6.84601 13.5089 7.01778C13.4379 7.18954 13.4193 7.37854 13.4555 7.56088C13.4917 7.74323 13.581 7.91072 13.7121 8.04218C13.8432 8.17364 14.0102 8.26317 14.1921 8.29944C14.374 8.33571 14.5625 8.31709 14.7338 8.24595C14.9051 8.1748 15.0515 8.05432 15.1545 7.89974C15.2575 7.74515 15.3125 7.56341 15.3125 7.3775C15.3125 7.1282 15.2137 6.8891 15.0379 6.71282C14.8621 6.53654 14.6236 6.4375 14.375 6.4375Z' />
-                                            </svg>
-                                        </button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className='z-99999 select-none relative' sideOffset={8}>
-                                        {rootAdmin && (
-                                            <DropdownMenuItem onSelect={onSelectManageServer}>
-                                                Manage Server
-                                                <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs select-none'>
-                                                    Staff
+                                        <Button
+                                            variant="ghost"
+                                            className="w-full h-auto p-3 xl:p-3.5 rounded-lg hover:bg-gray-800/70 transition-colors duration-200 justify-start gap-3"
+                                        >
+                                            <div className="w-8 h-8 xl:w-9 xl:h-9 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                                <span className="text-black font-semibold text-sm">
+                                                    {user?.username?.[0]?.toUpperCase() || 'U'}
                                                 </span>
+                                            </div>
+                                            <div className="flex-1 min-w-0 text-left">
+                                                <div className="text-sm xl:text-sm font-medium text-white truncate">
+                                                    {user?.username || 'User'}
+                                                </div>
+                                                <div className="text-xs xl:text-xs text-gray-400 truncate">
+                                                    {user?.email || 'user@panel.com'}
+                                                </div>
+                                            </div>
+                                            <div className="w-2 h-2 xl:w-2 xl:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] bg-gray-800 border-gray-700 text-gray-200">
+                                        {rootAdmin && (
+                                            <DropdownMenuItem
+                                                className="focus:bg-gray-700 focus:text-white cursor-pointer"
+                                                onSelect={onSelectManageServer}
+                                            >
+                                                <IconUserShield className="mr-2 h-4 w-4" />
+                                                <span>Manage Server</span>
                                             </DropdownMenuItem>
                                         )}
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            className="text-green-400 hover:bg-green-900/20 hover:text-green-400 focus:bg-green-900/20 focus:text-green-400 cursor-pointer"
+                                            onSelect={onTriggerLogout}
+                                        >
+                                            <LogOut className="mr-2 h-4 w-4" />
+                                            <span>Logout</span>
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-                            <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                            <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
-                                {/* lord forgive me for hardcoding this */}
-                                <NavLink
-                                    className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                    ref={NavigationHome}
-                                    to={`/server/${id}`}
-                                    onClick={toggleSidebar}
-                                    end
-                                >
-                                    <HugeIconsHome fill='currentColor' />
-                                    <p>Home</p>
-                                </NavLink>
-                                {egg_name && !egg_name?.includes(blank_egg_prefix) && (
-                                    <>
-                                        <Can action={'file.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationFiles}
-                                                to={`/server/${id}/files`}
-                                                onClick={toggleSidebar}
-                                            >
-                                                <HugeIconsFolder fill='currentColor' />
-                                                <p>Files</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'database.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationDatabases}
-                                                to={`/server/${id}/databases`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsDatabase fill='currentColor' />
-                                                <p>Databases</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'backup.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationBackups}
-                                                to={`/server/${id}/backups`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsCloudUp fill='currentColor' />
-                                                <p>Backups</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'allocation.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationNetworking}
-                                                to={`/server/${id}/network`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsConnections fill='currentColor' />
-                                                <p>Networking</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'user.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationUsers}
-                                                to={`/server/${id}/users`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsPeople fill='currentColor' />
-                                                <p>Users</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can
-                                            action={['startup.read', 'startup.update', 'startup.docker-image']}
-                                            matchAny
-                                        >
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationStartup}
-                                                to={`/server/${id}/startup`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsConsole fill='currentColor' />
-                                                <p>Startup</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={'schedule.*'} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationSchedules}
-                                                to={`/server/${id}/schedules`}
-                                                onClick={toggleSidebar}
-                                            >
-                                                <HugeIconsClock fill='currentColor' />
-                                                <p>Schedules</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={['settings.*', 'file.sftp']} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationSettings}
-                                                to={`/server/${id}/settings`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsDashboardSettings fill='currentColor' />
-                                                <p>Settings</p>
-                                            </NavLink>
-                                        </Can>
-                                        <Can action={['activity.*', 'activity.read']} matchAny>
-                                            <NavLink
-                                                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                                ref={NavigationActivity}
-                                                to={`/server/${id}/activity`}
-                                                onClick={toggleSidebar}
-                                                end
-                                            >
-                                                <HugeIconsPencil fill='currentColor' />
-                                                <p>Activity</p>
-                                            </NavLink>
-                                        </Can>
-                                        {/* TODO: finish modrinth support *\}
-                    {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny>
-                        <NavLink
-                            className='flex flex-row items-center sm:hidden md:show'
-                            ref={NavigationMod}
-                            to={`/server/${id}/mods`}
-                            onClick={toggleSidebar}
-                            end
-                        >
-                            <ModrinthLogo />
-                            <p>Mods/Plugins</p>
-                        </NavLink>
-                    </Can> */}
-                                    </>
-                                )}
-                                <Can action={'startup.software'}>
-                                    <NavLink
-                                        className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-                                        ref={NavigationShell}
-                                        to={`/server/${id}/shell`}
-                                        onClick={toggleSidebar}
-                                        end
-                                    >
-                                        <HugeIconsController fill='currentColor' />
-                                        <p>Software</p>
-                                    </NavLink>
-                                </Can>
-                            </ul>
-                        </MainSidebar>
+                        </div>
+                    </MainSidebar>
 
-                        <MainWrapper
-                            className={`${isSidebarVisible ? 'max-w-[calc(100%-300px-8px)]' : 'w-full'}`}
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                        >
+                    <Suspense fallback={null}>
+                        <MainWrapper onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                             <CommandMenu />
                             <InstallListener />
                             <TransferListener />
                             <WebsocketHandler />
                             <main
-                                data-pyro-main=''
-                                data-pyro-transitionrouter=''
-                                className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                                nadhi-mng-data=''
+                                className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white'
                             >
                                 {inConflictState &&
-                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>
@@ -622,7 +708,7 @@ const ServerRouter = () => {
                                 )}
                             </main>
                         </MainWrapper>
-                    </div>
+                    </Suspense>
                 </>
             )}
         </Fragment>

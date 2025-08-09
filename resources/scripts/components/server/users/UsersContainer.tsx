@@ -59,10 +59,16 @@ const UsersContainer = () => {
         <ServerContentBlock title={'Users'}>
             <FlashMessageRender byKey={'users'} />
             <MainPageHeader title={'Users'}>
+                
                 <Can action={'user.create'}>
                     <AddSubuserButton />
                 </Can>
             </MainPageHeader>
+            <div className='text-center text-sm text-zinc-300'>
+                <p>
+                    Reselling or using the panel for any other purpose than directly managing your own servers is not allowed.
+                </p>
+            </div>
             {!subusers.length ? (
                 <p className={`text-center text-sm text-zinc-300`}>
                     Your server does not have any additional users. Add others to help you manage your server.

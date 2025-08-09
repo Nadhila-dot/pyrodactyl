@@ -17,6 +17,7 @@ import SettingsContainer from '@/components/server/settings/SettingsContainer';
 import ShellContainer from '@/components/server/shell/ShellContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
+import AdminContainer from '@/components/Admin/AdminContainer';
 
 // Each of the router files is already code split out appropriately — so
 // all the items above will only be loaded in when that router is loaded.
@@ -52,6 +53,8 @@ interface Routes {
     account: RouteDefinition[];
     // All the routes available under "/server/:id"
     server: ServerRouteDefinition[];
+    // All the routes available under "/admin"
+    admin: RouteDefinition[];
 }
 
 export default {
@@ -80,6 +83,15 @@ export default {
             path: 'activity',
             name: 'Activity',
             component: ActivityLogContainer,
+        },
+    ],
+    admin: [
+        {
+            route: '',
+            path: '',
+            name: 'Admin',
+            component: AdminContainer,
+            end: true,
         },
     ],
     server: [

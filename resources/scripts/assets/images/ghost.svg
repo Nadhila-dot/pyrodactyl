@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200pt" height="1200pt" version="1.1" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+ <path transform="scale(12)" d="m25.3 26.7c8.0999-12.7 23.8-19.7 40-15.1 16.7 4.7002 27.5 21.1 25.4 38.4-2.3001 19.3-19.8 28.6-39.2 31.2-18 2.5-49.1-12-49.1-12 16 4 17.7-20.5 17.8-21.9v-0.099935c-0.40006-7.1999 1.1999-14.4 5.0999-20.5zm0 0" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m56.3 38.8v-5c0-2.8001 2.3001-5 5-5 2.8001 0 5 2.3001 5 5v5c0 2.8001-2.3001 5-5 5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m80.5 42.1c2.3001 0 4.1999-1.9001 4.1999-4.1999v-5c0-2.3001-1.9001-4.1999-4.1999-4.1999-2.3001 0-4.1999 1.9001-4.1999 4.1999v5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m73 52.1c0-1.8001 1.5-3.3001 3.3001-3.3001s3.3001 1.5 3.3001 3.3001-1.5 3.3001-3.3001 3.3001" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m63.8 33.8c1.4001 0 2.5 1.0999 2.5 2.5s-1.0999 2.5-2.5 2.5-2.5-1.0999-2.5-2.5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m82.2 33.8c1.4001 0 2.5 1.0999 2.5 2.5s-1.0999 2.5-2.5 2.5-2.5-1.0999-2.5-2.5" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m43.6 63.7c0-2.3001 1.8001-4.0999 4.0999-4.0999h13.7c2.3001 0 4.0999 1.8001 4.0999 4.0999 0 2.3001-1.8001 4.0999-4.0999 4.0999l-13.7 3.25e-4" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+ <path transform="scale(12)" d="m89 58.2h3.9001c2.3001 0 4.0999 1.8001 4.0999 4.0999 0 2.3001-1.8001 4.0999-4.0999 4.0999h-9.4001" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="3"/>
+</svg>

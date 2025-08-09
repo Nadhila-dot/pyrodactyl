@@ -3,5 +3,5 @@
 ])
 
 @section('container')
-    <div data-pyro-app id="app"></div>
+    <div nadhi-mng-app id="app"></div>
 @endsection

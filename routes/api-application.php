@@ -3,8 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use Pterodactyl\Http\Controllers\Api\Application;
 use Pterodactyl\Http\Controllers\Base;
+use Pterodactyl\Http\Controllers\Nadhi;
 
 
+
+// Special case
+
+// Announcement routes
+Route::get('/admin/announcement', [Nadhi\BaseController::class, 'annouce'])->name('admin.announcement.get');
+Route::post('/admin/announcement/update', [Nadhi\BaseController::class, 'setAnnouncement'])->name('admin.announcement.update');
+
+// Logo routes
+
+Route::post('/admin/logo/update', [Nadhi\BaseController::class, 'setLogo'])->name('admin.logo.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +39,8 @@ Route::group(['prefix' => '/panel'], function () {
 | Endpoint: /api/application/users
 |
 */
+
+
 
 
 Route::group(['prefix' => '/users'], function () {

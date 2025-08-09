@@ -1,6 +1,13 @@
 <!DOCTYPE html>
-<!-- Copyright (c) 2023-2025 Pyro Inc., parent collaborators, and contributors -->
-<html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
+<!--
+ _   _      _ _         _   _           _ _     _ 
+| | | | ___| | | ___   | \ | | __ _  __| | |__ (_)
+| |_| |/ _ \ | |/ _ \  |  \| |/ _` |/ _` | '_ \| |
+|  _  |  __/ | | (_) | | |\  | (_| | (_| | | | | |
+|_| |_|\___|_|_|\___/  |_| \_|\__,_|\__,_|_| |_|_|
+Made with love! (Main repo PYRO)
+-->
+<html nadhi.dev-mnger lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
         <title>{{ config('app.name', 'Panel') }}</title>
 
@@ -37,6 +44,21 @@
         <style>
             @import url('https://fonts.bunny.net/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap')
         </style>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Climate+Crisis&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet"
+        ></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Codystar&family=Rationale&family=Sigmar&display=swap"
+          rel="stylesheet"
+        ></link>
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"></link>
 
         @yield('assets')
 
@@ -45,7 +67,7 @@
         @viteReactRefresh
         @vite('resources/scripts/index.tsx')
     </head>
-    <body data-pyro-body class="{{ $css['body'] }}" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
+    <body nadhi-mng-body class="{{ $css['body'] }}" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
         @section('content')
             @yield('above-container')
             @yield('container')

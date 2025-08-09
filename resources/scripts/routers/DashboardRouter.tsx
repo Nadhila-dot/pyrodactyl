@@ -9,9 +9,11 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { LogOut, UserCog } from "lucide-react"
+
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
 import Logo from '@/components/elements/PyroLogo';
@@ -21,8 +23,12 @@ import HugeIconsDashboardSettings from '@/components/elements/hugeicons/Dashboar
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
+import { Player } from '@lordicon/react';
+import { IconKey, IconLinkPlus, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
 
 import http from '@/api/http';
+import Footer from '@/components/Footer/footer';
+import { Separator } from '@/components/ui/separator';
 
 const DashboardRouter = () => {
     const location = useLocation();
@@ -161,6 +167,8 @@ const DashboardRouter = () => {
     const NavigationApi = useRef(null);
     const NavigationSSH = useRef(null);
 
+    const user = window.PterodactylUser;
+
     const calculateTop = (pathname: string) => {
         // Get currents of navigation refs.
         const ButtonHome = NavigationHome.current;
@@ -190,11 +198,20 @@ const DashboardRouter = () => {
         return () => clearTimeout(timeoutId);
     }, [top]);
 
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    const handleLogout = () => {
+        http.post('/auth/logout').finally(() => {
+            // @ts-expect-error this is valid
+            window.location = '/';
+        });
+    };
+
     return (
         <Fragment key={'dashboard-router'}>
             {isSidebarVisible && (
                 <div
-                    className='lg:hidden fixed inset-0 bg-black bg-opacity-50 z-9998 transition-opacity duration-300 '
+                    className='lg:hidden fixed inset-0 bg-black/60 z-9998 transition-opacity duration-300 backdrop-blur-sm'
                     onClick={() => showSideBar(false)}
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
@@ -203,7 +220,7 @@ const DashboardRouter = () => {
             )}
             <button
                 id='sidebarToggle'
-                className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md cursor-pointer'
+                className='lg:hidden fixed flex items-center justify-center top-5 left-5 z-50 bg-black p-3 rounded-lg text-white shadow-lg hover:bg-zinc-900 transition-colors duration-200 cursor-pointer'
                 onClick={toggleSidebar}
                 aria-label='Toggle sidebar'
             >
@@ -212,14 +229,15 @@ const DashboardRouter = () => {
 
             <MainSidebar
                 ref={sidebarRef}
-                className={`fixed inset-y-0 left-0 z-9999 w-[300px] bg-[#1a1a1a] ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} absolute backdrop-blur-xs lg:translate-x-0 lg:relative lg:flex lg:shrink-0`}
+                className={`fixed inset-y-0 left-0 z-9999 w-72 xl:w-80 bg-black text-white ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} lg:translate-x-0 lg:relative lg:flex lg:shrink-0 border-r border-gray-900`}
                 style={{
-                    // this is needed so we can set the positioning. If you can do it in tailwind, please do. I'm no expert - why_context
                     transform: `translate(${sidebarPosition}px)`,
                 }}
             >
+                {/* Active Route Indicator */}
+                {/*
                 <div
-                    className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
+                    className='absolute bg-green-500 w-[2px] h-10 left-0 rounded-full pointer-events-none'
                     style={{
                         top,
                         height,
@@ -228,84 +246,189 @@ const DashboardRouter = () => {
                             'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                     }}
                 />
-                <div
-                    className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
-                    style={{
-                        top,
-                        opacity: top === '0' ? 0 : 0.5,
-                        transition:
-                            'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                    }}
-                />
-                <div className='relative flex flex-row items-center justify-between h-8'>
-                    <NavLink to={'/'} className='flex shrink-0 h-full w-fit'>
-                        <Logo />
-                        {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
-                    </NavLink>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 cursor-pointer'>
-                                <svg
-                                    xmlns='http://www.w3.org/2000/svg'
-                                    width='16'
-                                    height='15'
-                                    fill='currentColor'
-                                    viewBox='0 0 16 15'
-                                    className='flex shrink-0 h-full w-full'
+                */}
+
+                {/* Sidebar Content */}
+                <div className="flex flex-col h-full p-4 xl:p-5">
+                    {/* Header */}
+                    <div className='flex items-center justify-between mb-4 xl:mb-5'>
+                        <NavLink to={'/'} className='flex items-center'>
+                            <div className="scale-100 xl:scale-105 transition-transform duration-200">
+                                <Logo />
+                                <Separator className="max-w-1/2 mt-4" />
+                            </div>
+                        </NavLink>
+                        
+                    </div>
+                    
+
+                    
+
+                    {/* Welcome Message */}
+                    <div className="mb-8 xl:mb-9">
+                        <h2 className="text-xl xl:text-xl font-semibold text-white mb-1">
+                            Good {new Date().getHours() >= 12 ? 'evening' : 'morning'}!
+                        </h2>
+                        <p className="text-gray-400 text-sm xl:text-sm">Welcome back, {user?.username || 'User'}</p>
+                    </div>
+
+
+                    {/* Navigation */}
+                    <nav className="flex-1">
+                        <ul className='space-y-1 xl:space-y-1.5' onClick={toggleSidebar}>
+                            <li>
+                                <NavLink
+                                    to={'/'}
+                                    end
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                            : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                        }`
+                                    }
+                                    ref={NavigationHome}
                                 >
-                                    <path d='M8.9375 7.3775C8.9375 7.56341 8.88252 7.74515 8.7795 7.89974C8.67649 8.05432 8.53007 8.1748 8.35877 8.24595C8.18746 8.31709 7.99896 8.33571 7.8171 8.29944C7.63525 8.26317 7.4682 8.17364 7.33709 8.04218C7.20598 7.91072 7.11669 7.74323 7.08051 7.56088C7.04434 7.37854 7.06291 7.18954 7.13386 7.01778C7.20482 6.84601 7.32498 6.69921 7.47915 6.59592C7.63332 6.49263 7.81458 6.4375 8 6.4375C8.24864 6.4375 8.4871 6.53654 8.66291 6.71282C8.83873 6.8891 8.9375 7.1282 8.9375 7.3775ZM1.625 6.4375C1.43958 6.4375 1.25832 6.49263 1.10415 6.59592C0.949982 6.69921 0.829821 6.84601 0.758863 7.01778C0.687906 7.18954 0.669341 7.37854 0.705514 7.56088C0.741688 7.74323 0.830976 7.91072 0.962088 8.04218C1.0932 8.17364 1.26025 8.26317 1.4421 8.29944C1.62396 8.33571 1.81246 8.31709 1.98377 8.24595C2.15507 8.1748 2.30149 8.05432 2.4045 7.89974C2.50752 7.74515 2.5625 7.56341 2.5625 7.3775C2.5625 7.1282 2.46373 6.8891 2.28791 6.71282C2.1121 6.53654 1.87364 6.4375 1.625 6.4375ZM14.375 6.4375C14.1896 6.4375 14.0083 6.49263 13.8542 6.59592C13.7 6.69921 13.5798 6.84601 13.5089 7.01778C13.4379 7.18954 13.4193 7.37854 13.4555 7.56088C13.4917 7.74323 13.581 7.91072 13.7121 8.04218C13.8432 8.17364 14.0102 8.26317 14.1921 8.29944C14.374 8.33571 14.5625 8.31709 14.7338 8.24595C14.9051 8.1748 15.0515 8.05432 15.1545 7.89974C15.2575 7.74515 15.3125 7.56341 15.3125 7.3775C15.3125 7.1282 15.2137 6.8891 15.0379 6.71282C14.8621 6.53654 14.6236 6.4375 14.375 6.4375Z' />
-                                </svg>
-                            </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className='z-99999' sideOffset={8}>
+                                    <IconServer size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                    <span className="font-medium text-sm xl:text-sm">Servers</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={'/account/api'}
+                                    end
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                            : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                        }`
+                                    }
+                                    ref={NavigationApi}
+                                >
+                                    <IconKey size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                    <span className="font-medium text-sm xl:text-sm">API Keys</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={'/account/ssh'}
+                                    end
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                            : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                        }`
+                                    }
+                                    ref={NavigationSSH}
+                                >
+                                    <IconLinkPlus size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                    <span className="font-medium text-sm xl:text-sm">SSH Keys</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink
+                                    to={'/account'}
+                                    end
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                            : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                        }`
+                                    }
+                                    ref={NavigationSettings}
+                                >
+                                    <IconSettings size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                    <span className="font-medium text-sm xl:text-sm">Settings</span>
+                                </NavLink>
+                            </li>
                             {rootAdmin && (
-                                <DropdownMenuItem onSelect={onSelectAdminPanel}>
-                                    Admin Panel
-                                    <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
-                                        Staff
-                                    </span>
-                                </DropdownMenuItem>
+                                <li>
+                                    <NavLink
+                                        to={'/admin'}
+                                        end
+                                        className={({ isActive }) =>
+                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                            }`
+                                        }
+                                    >
+                                        <IconUserShield size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                        <span className="font-medium text-sm xl:text-sm">Admin Panel</span>
+                                    </NavLink>
+                                </li>
                             )}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                        </ul>
+                    </nav>
+
+
+                    {/* User Profile */}
+                    <div className="mt-auto pt-4 xl:pt-5 border-t border-gray-900">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="w-full h-auto p-3 xl:p-3.5 rounded-lg hover:bg-gray-800/70 transition-colors duration-200 justify-start gap-3"
+                                >
+                                    <div className="w-8 h-8 xl:w-9 xl:h-9 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span className="text-black font-semibold text-sm">
+                                            {user?.username?.[0]?.toUpperCase() || 'U'}
+                                        </span>
+                                    </div>
+                                    <div className="flex-1 min-w-0 text-left">
+                                        <div className="text-sm xl:text-sm font-medium text-white truncate">
+                                            {user?.username || 'User'}
+                                        </div>
+                                        <div className="text-xs xl:text-xs text-gray-400 truncate">
+                                            {user?.email || 'user@panel.com'}
+                                        </div>
+                                    </div>
+                                    <div className="w-2 h-2 xl:w-2 xl:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] bg-gray-800 border-gray-700 text-gray-200">
+                                {rootAdmin && (
+                                    <DropdownMenuItem className="focus:bg-gray-700 focus:text-white cursor-pointer">
+                                        <IconUserShield className="mr-2 h-4 w-4" />
+                                        <span>Admin</span>
+                                    </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem
+                                    className="text-green-400 hover:bg-green-900/20 hover:text-green-400 focus:bg-green-900/20 focus:text-green-400 cursor-pointer"
+                                    onClick={handleLogout}
+                                >
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    <span>Logout</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
-                <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper ' onClick={toggleSidebar}>
-                    <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
-                        <HugeIconsHome fill='currentColor' />
-                        <p>Servers</p>
-                    </NavLink>
-                    <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
-                        <HugeIconsApi fill='currentColor' />
-                        <p>API Keys</p>
-                    </NavLink>
-                    <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
-                        <HugeIconsSsh fill='currentColor' />
-                        <p>SSH Keys</p>
-                    </NavLink>
-                    <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                        <HugeIconsDashboardSettings fill='currentColor' />
-                        <p>Settings</p>
-                    </NavLink>
-                </ul>
             </MainSidebar>
 
             <Suspense fallback={null}>
                 <MainWrapper onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
                     <main
-                        data-pyro-main=''
-                        data-pyro-transitionrouter=''
-                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
+                        nadhi_dev='https://nadhi.dev'
+
+                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white'
                     >
                         <Routes>
                             <Route path='' element={<DashboardContainer />} />
 
+                            {/* Account Routes */}
                             {routes.account.map(({ route, component: Component }) => (
                                 <Route
                                     key={route}
                                     path={`/account/${route}`.replace('//', '/')}
+                                    element={<Component />}
+                                />
+                            ))}
+
+                            {/* Admin Route */}
+                            {rootAdmin && routes.admin?.map(({ route, component: Component }) => (
+                                <Route
+                                    key={route}
+                                    path={`/admin/${route}`.replace('//', '/')}
                                     element={<Component />}
                                 />
                             ))}
@@ -315,6 +438,7 @@ const DashboardRouter = () => {
                     </main>
                 </MainWrapper>
             </Suspense>
+
         </Fragment>
     );
 };

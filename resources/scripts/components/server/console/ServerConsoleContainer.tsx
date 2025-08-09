@@ -22,6 +22,7 @@ export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
+    const status = ServerContext.useStoreState((state) => state.status.value);
     const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
@@ -49,7 +50,7 @@ const ServerConsoleContainer = () => {
                     </h2>
                 )}
                 <ServerDetailsBlock />
-                <Console />
+                <Console status={status} />
                 <div className={'grid grid-cols-1 md:grid-cols-3 gap-4'}>
                     <Spinner.Suspense>
                         <StatGraphs />

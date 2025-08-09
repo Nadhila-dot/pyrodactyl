@@ -72,15 +72,15 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     style={
                         status === 'offline'
                             ? {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
+                                background:
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #10B981 0%, #059669 100%)',
+                                opacity: 1,
+                            }
                             : {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                opacity: 0.5,
+                            }
                     }
                     className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md cursor-pointer'
                     disabled={status !== 'offline'}
@@ -107,15 +107,15 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     style={
                         status === 'offline'
                             ? {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                opacity: 0.5,
+                            }
                             : {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
+                                background:
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #10B981 0%, #059669 100%)',
+                                opacity: 1,
+                            }
                     }
                     className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all cursor-pointer'
                     disabled={status === 'offline'}

@@ -1,134 +1,111 @@
-import { Dialog as HDialog } from '@headlessui/react';
-import { AnimatePresence, motion } from 'motion/react';
-import { useRef, useState } from 'react';
+// Dialog.tsx
+import * as React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
-import HugeIconsX from '../hugeicons/X';
-import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
+interface DialogProps {
+  open: boolean;
+  title?: string;
+  description?: string;
+  onClose: () => void;
+  onConfirm?: () => void;
+  hideCloseIcon?: boolean;
+  children?: React.ReactNode;
+  confirmText?: string;
+  cancelText?: string;
+  showFooter?: boolean;
+}
 
-const variants = {
-    open: {
-        scale: 1,
-        opacity: 1,
-        transition: {
-            type: 'spring',
-            damping: 20,
-            stiffness: 300,
-            duration: 0.15,
-        },
-    },
-    closed: {
-        scale: 0.75,
-        opacity: 0,
-        transition: {
-            type: 'easeIn',
-            duration: 0.15,
-        },
-    },
-    bounce: {
-        scale: 0.95,
-        opacity: 1,
-        transition: { type: 'linear', duration: 0.075 },
-    },
-};
+const Dialog: React.FC<DialogProps> = ({
+  open,
+  title,
+  description,
+  onClose,
+  onConfirm,
+  hideCloseIcon,
+  children,
+  confirmText = "Confirm",
+  cancelText = "Cancel",
+  showFooter = true,
+}) => {
+  const handleConfirm = () => {
+    onConfirm?.();
+    onClose();
+  };
 
-const Dialog = ({
-    open,
-    title,
-    description,
-    onClose,
-    hideCloseIcon,
-    preventExternalClose,
-    children,
-}: RenderDialogProps) => {
-    const container = useRef<HTMLDivElement>(null);
-    const [icon, setIcon] = useState<React.ReactNode>();
-    const [footer, setFooter] = useState<React.ReactNode>();
-    const [iconPosition, setIconPosition] = useState<IconPosition>('title');
-    const [down, setDown] = useState(false);
+  return (
+    <AnimatePresence>
+      {open && (
+        <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+          <AlertDialogContent
+            asChild
+            className="bg-black border border-emerald-500 text-white rounded-xl p-6 shadow-lg"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20, duration: 0.15 }}
+            >
+              <div className="relative">
+                {!hideCloseIcon && (
+                  <button
+                    onClick={onClose}
+                    className="absolute right-0 top-0 text-white/70 hover:text-white hover:bg-emerald-600/20 p-2 rounded-md transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                )}
+                <AlertDialogHeader>
+                  {title && (
+                    <AlertDialogTitle className="text-xl font-bold text-white">
+                      {title}
+                    </AlertDialogTitle>
+                  )}
+                  {description && (
+                    <AlertDialogDescription className="text-emerald-200 text-sm">
+                      {description}
+                    </AlertDialogDescription>
+                  )}
+                </AlertDialogHeader>
 
-    const onContainerClick = (down: boolean, e: React.MouseEvent<HTMLDivElement>): void => {
-        if (e.target instanceof HTMLElement && container.current?.isSameNode(e.target)) {
-            setDown(down);
-        }
-    };
+                <div className="mt-4 text-emerald-100">{children}</div>
 
-    const onDialogClose = (): void => {
-        if (!preventExternalClose) {
-            return onClose();
-        }
-    };
-
-    return (
-        <AnimatePresence>
-            {open && (
-                <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
-                    <HDialog
-                        static
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        open={open}
-                        onClose={onDialogClose}
+                {showFooter && (
+                  <AlertDialogFooter className="mt-6 flex space-x-3">
+                    <AlertDialogCancel
+                      className="border-emerald-500 text-emerald-300 hover:bg-emerald-500/20"
+                      asChild
                     >
-                        <div
-                            style={{
-                                background:
-                                    'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
-                            }}
-                            className={'fixed inset-0 backdrop-blur-xs z-9997'}
-                        />
-                        <div className={'fixed inset-0 overflow-y-auto z-9998'}>
-                            <div
-                                ref={container}
-                                className={styles.dialogContainer}
-                                onMouseDown={onContainerClick.bind(this, true)}
-                                onMouseUp={onContainerClick.bind(this, false)}
-                            >
-                                <HDialog.Panel
-                                    as={motion.div}
-                                    initial={'closed'}
-                                    animate={down ? 'bounce' : 'open'}
-                                    exit={'closed'}
-                                    variants={variants}
-                                    className={styles.panel}
-                                >
-                                    <div className={'flex p-6 pb-0 overflow-y-auto'}>
-                                        {iconPosition === 'container' && icon}
-                                        <div className={'flex-1 max-h-[70vh] min-w-0'}>
-                                            <div className={'flex items-center'}>
-                                                {iconPosition !== 'container' && icon}
-                                                <div>
-                                                    {title && (
-                                                        <HDialog.Title className={styles.title}>{title}</HDialog.Title>
-                                                    )}
-                                                    {description && (
-                                                        <HDialog.Description>{description}</HDialog.Description>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            {children}
-                                            <div className={'invisible h-6'} />
-                                        </div>
-                                    </div>
-                                    {footer}
-                                    {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
-                                    {!hideCloseIcon && (
-                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onClose} className='cursor-pointer'>
-                                                <HugeIconsX fill='currentColor' />
-                                            </button>
-                                        </div>
-                                    )}
-                                </HDialog.Panel>
-                            </div>
-                        </div>
-                    </HDialog>
-                </DialogContext.Provider>
-            )}
-        </AnimatePresence>
-    );
+                      <Button variant="outline">{cancelText}</Button>
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleConfirm}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                      asChild
+                    >
+                      <Button>{confirmText}</Button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                )}
+              </div>
+            </motion.div>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default Dialog;

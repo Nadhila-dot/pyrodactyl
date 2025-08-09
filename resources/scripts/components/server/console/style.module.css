@@ -20,36 +20,46 @@
     }
 }
 
+
+.chart_container {
+    @apply relative rounded-xl border-[1px] border-emerald-500 bg-black;
+}
+
+
 .terminal {
     @apply relative flex h-full w-full flex-col;
 
     & > .terminalContainer {
-        @apply h-full min-h-[453px] rounded-t-xl border-x-[1px] border-t-[1px] border-[#ffffff11] bg-[#131313] pt-8 pl-8 font-mono text-sm;
+        @apply h-full min-h-[453px] rounded-t-xl border-x-[1px] border-t-[1px] border-zinc-800 bg-black pt-8 pl-8 font-mono text-sm;
 
         & #terminal {
             @apply h-full w-full;
 
             &::-webkit-scrollbar-track {
-                @apply w-2;
+                @apply w-2 bg-zinc-900;
             }
 
             &::-webkit-scrollbar-thumb {
-                @apply bg-zinc-900;
+                @apply bg-emerald-600 rounded-full hover:bg-emerald-500;
             }
         }
     }
 
     & .command_icon {
-        @apply absolute top-0 left-0 z-10 flex h-full items-center px-3 transition-colors duration-100 select-none;
+        @apply absolute top-0 left-0 z-10 flex h-full items-center px-3 transition-colors duration-100 select-none text-emerald-400;
     }
 
     & .command_input {
-        @apply relative w-full rounded-b-xl border-x-[1px] border-b-[1px] border-[#ffffff11] bg-[#131313] px-4 pt-2 pr-4 pb-6 pl-8 font-mono text-sm text-zinc-100;
+        @apply relative w-full rounded-b-xl border-x-[1px] border-b-[1px] border-zinc-800 bg-black px-4 pt-2 pr-4 pb-6 pl-8 font-mono text-sm text-white;
         @apply outline-hidden focus:ring-0 focus-visible:outline-none;
-        @apply focus:border-b-blue-500 active:border-b-blue-500;
+        @apply focus:border-b-emerald-500 active:border-b-emerald-500 focus:shadow-[0_1px_0_0_rgb(16_185_129_/_0.3)];
+        
+        &::placeholder {
+            @apply text-zinc-500;
+        }
+        
+        &:focus::placeholder {
+            @apply text-emerald-400/50;
+        }
     }
-}
-
-.chart_container {
-    @apply relative rounded-xl border-[1px] border-[#ffffff11] bg-[#131313];
 }

@@ -7,6 +7,7 @@ use Pterodactyl\Http\Middleware\Activity\AccountSubject;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
+use Pterodactyl\Http\Controllers\Nadhi;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,8 @@ use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 |
 */
 Route::get('/', [Client\ClientController::class, 'index'])->name('api:client.index');
+Route::get('/announcement', [Nadhi\BaseController::class, 'annouce'])->name('api:client.announcement');
+Route::get('/logo', [Nadhi\BaseController::class, 'logo'])->name('api:client.logo');
 Route::get('/permissions', [Client\ClientController::class, 'permissions']);
 Route::get('/version', function () {
   return response()->json(['version' => config('app.version')]);

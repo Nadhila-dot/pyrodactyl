@@ -17,6 +17,7 @@ import { usePermissions } from '@/plugins/usePermissions';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
 import styles from './style.module.css';
+import Spinner from '@/components/elements/Spinner';
 
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',
@@ -51,7 +52,13 @@ const terminalProps: ITerminalOptions = {
     theme: theme,
 };
 
-const Console = () => {
+
+interface ConsoleProps {
+    status?: any
+}
+
+
+const Console = ({ status }: ConsoleProps) => {
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
@@ -192,6 +199,10 @@ const Console = () => {
         };
     }, [connected, instance]);
 
+    if (status = 'fetching'){
+        console.log("Still Fetching")
+    }
+
     return (
         <div
             className='transform-gpu skeleton-anim-2'
@@ -213,6 +224,12 @@ const Console = () => {
                 >
                     <div className={'h-full'}>
                         <div id={styles.terminal} ref={ref} />
+                        {status === 'fetching' && (
+                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/50">
+                                <Spinner size="large" />
+                                <p className="mt-4 text-sm text-gray-300 !font-[Poppins]">Getting things ready..</p>
+                            </div>
+                        )}
                     </div>
                 </div>
                 {canSendCommands && (

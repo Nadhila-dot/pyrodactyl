@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
 import ServerRow from '@/components/dashboard/ServerRow';
+import EmptyStateSvg from '@/assets/images/empty.svg';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,6 +23,7 @@ import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
 import { MainPageHeader } from '../elements/MainPageHeader';
+import Announcement from './misc/Annouce';
 
 const DashboardContainer = () => {
     const { search } = useLocation();
@@ -71,8 +73,11 @@ const DashboardContainer = () => {
                 }}
                 className='w-full'
             >
+                <div>
+                    <Announcement />
+                </div>
                 <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
-                    <div className='flex gap-4'>
+                <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <button className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md bg-[#ffffff11] hover:bg-[#ffffff22] transition hover:duration-0 cursor-pointer'>
@@ -173,11 +178,18 @@ const DashboardContainer = () => {
                                             </div>
                                         ))
                                     ) : (
-                                        <p className={`text-center text-sm text-zinc-400`}>
-                                            {showOnlyAdmin
-                                                ? 'There are no other servers to display.'
-                                                : 'There are no servers associated with your account.'}
-                                        </p>
+                                        <div className="flex flex-col items-center justify-center py-8">
+                                                <img
+                                                    src={EmptyStateSvg}
+                                                    alt="No servers"
+                                                    className="w-48 h-48 mb-4 text-white opacity-100 bg-zinc-400 rounded-lg"
+                                                />
+                                                <p className="text-center text-sm text-zinc-400">
+                                                    {showOnlyAdmin
+                                                        ? 'There are no other servers to display.'
+                                                        : 'There are no servers associated with your account!'}
+                                                </p>
+                                            </div>
                                     )
                                 }
                             </Pagination>
@@ -205,11 +217,18 @@ const DashboardContainer = () => {
                                                 </div>
                                             ))
                                         ) : (
-                                            <p className={`text-center text-sm text-zinc-400`}>
-                                                {showOnlyAdmin
-                                                    ? 'There are no other servers to display.'
-                                                    : 'There are no servers associated with your account.'}
-                                            </p>
+                                            <div className="flex flex-col items-center justify-center py-8">
+                                                <img
+                                                    src={EmptyStateSvg}
+                                                    alt="No servers"
+                                                    className="w-48 h-48 mb-4 opacity-75 bg-zinc-400 rounded-lg"
+                                                />
+                                                <p className="text-center text-sm text-zinc-400">
+                                                    {showOnlyAdmin
+                                                        ? 'There are no other servers to display.'
+                                                        : 'There are no servers associated with your account!'}
+                                                </p>
+                                            </div>
                                         )
                                     }
                                 </Pagination>
