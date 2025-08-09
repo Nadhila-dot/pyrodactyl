@@ -238,7 +238,7 @@ const FileEditContainer = () => {
                             <button
                                 style={{
                                     background:
-                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(255, 52, 60) 0%, rgb(240, 111, 83) 100%)',
+                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
                                 }}
                                 className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md cursor-pointer'
                                 onClick={() => save()}
