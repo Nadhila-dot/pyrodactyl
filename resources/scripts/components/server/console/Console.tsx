@@ -20,7 +20,6 @@ import styles from './style.module.css';
 import Spinner from '@/components/elements/Spinner';
 
 const theme = {
-    // background: 'rgba(0, 0, 0, 0)',
     background: '#131313',
     cursor: 'transparent',
     black: '#000000',
@@ -48,17 +47,14 @@ const terminalProps: ITerminalOptions = {
     allowTransparency: true,
     fontSize: 12,
     fontFamily: 'monospace, monospace',
-    // rows: 30,
     theme: theme,
 };
-
 
 interface ConsoleProps {
     status?: any
 }
 
-
-const Console = ({ status }: ConsoleProps) => {
+const Console = ({ status: _status }: ConsoleProps) => {
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
@@ -72,12 +68,14 @@ const Console = ({ status }: ConsoleProps) => {
     const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
     const [historyIndex, setHistoryIndex] = useState(-1);
 
+    // Get server status from context (like StatusPill)
+    const serverStatus = ServerContext.useStoreState((state) => state.status.value);
+
     const handleConsoleOutput = (line: string, prelude = false) =>
         terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
 
     const handleTransferStatus = (status: string) => {
         switch (status) {
-            // Sent by either the source or target node if a failure occurs.
             case 'failure':
                 terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
                 return;
@@ -98,9 +96,6 @@ const Console = ({ status }: ConsoleProps) => {
 
             setHistoryIndex(newIndex);
             e.currentTarget.value = history![newIndex] || '';
-
-            // By default up arrow will also bring the cursor to the start of the line,
-            // so we'll preventDefault to keep it at the end.
             e.preventDefault();
         }
 
@@ -130,19 +125,11 @@ const Console = ({ status }: ConsoleProps) => {
             terminal.open(ref.current);
             fitAddon.fit();
 
-            // Add support for capturing keys
             terminal.attachCustomKeyEventHandler((e: KeyboardEvent) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
                     document.execCommand('copy');
                     return false;
                 }
-                // } else if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-                //     e.preventDefault();
-                //     searchBar.show();
-                //     return false;
-                // } else if (e.key === 'Escape') {
-                //     searchBar.hidden();
-                // }
                 return true;
             });
         }
@@ -169,7 +156,6 @@ const Console = ({ status }: ConsoleProps) => {
         };
 
         if (connected && instance) {
-            // Do not clear the console if the server is being transferred.
             if (!isTransferring) {
                 terminal.clear();
             }
@@ -199,10 +185,6 @@ const Console = ({ status }: ConsoleProps) => {
         };
     }, [connected, instance]);
 
-    if (status = 'fetching'){
-        console.log("Still Fetching")
-    }
-
     return (
         <div
             className='transform-gpu skeleton-anim-2'
@@ -216,7 +198,8 @@ const Console = ({ status }: ConsoleProps) => {
             }}
         >
             <div className={clsx(styles.terminal, 'relative')}>
-                <SpinnerOverlay visible={!connected} size={'large'} />
+                {/* Only show spinner overlay if status is 'fetching' */}
+                <SpinnerOverlay visible={serverStatus === 'fetching'} size={'large'} />
                 <div
                     className={clsx(styles.terminalContainer, styles.overflows_container, {
                         'rounded-b': !canSendCommands,
@@ -224,7 +207,8 @@ const Console = ({ status }: ConsoleProps) => {
                 >
                     <div className={'h-full'}>
                         <div id={styles.terminal} ref={ref} />
-                        {status === 'fetching' && (
+                        {/* Only show spinner in terminal if status is 'fetching' */}
+                        {serverStatus === 'fetching' && (
                             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/50">
                                 <Spinner size="large" />
                                 <p className="mt-4 text-sm text-gray-300 !font-[Poppins]">Getting things ready..</p>
