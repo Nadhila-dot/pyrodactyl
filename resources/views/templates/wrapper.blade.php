@@ -29,6 +29,11 @@ Made with love! (Main repo PYRO)
             <meta name="darkreader-lock">
         @show
 
+        <script>
+            window.company = window.company || {};
+            window.company.name = "{{ config('app.name', 'Panel') }}";
+        </script>
+
         @section('user-data')
             @if(!is_null(Auth::user()))
                 <script>
