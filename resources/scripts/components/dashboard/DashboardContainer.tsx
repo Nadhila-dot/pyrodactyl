@@ -23,7 +23,7 @@ import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
 import { MainPageHeader } from '../elements/MainPageHeader';
-import Announcement from './misc/Annouce';
+import Announcement from '@/components/dashboard/misc/Annouce';
 
 const DashboardContainer = () => {
     const { search } = useLocation();
