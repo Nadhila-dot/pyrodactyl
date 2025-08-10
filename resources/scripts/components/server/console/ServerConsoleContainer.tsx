@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import isEqual from 'react-fast-compare';
 
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
@@ -18,6 +18,8 @@ import Features from '@feature/Features';
 
 import { StatusPill } from './StatusPill';
 
+import getPlugins from '@/api/server/plugins/getPlugins';
+
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
@@ -28,6 +30,16 @@ const ServerConsoleContainer = () => {
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
+    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+
+    useEffect(() => {
+        // Fetch plugins and log them
+        getPlugins(uuid, 'worlds').then((plugins) => {
+            console.log('Plugins:', plugins);
+        }).catch((err) => {
+            console.error('Failed to fetch plugins:', err);
+        });
+    }, [uuid]);
 
     return (
         <ServerContentBlock title={'Home'}>

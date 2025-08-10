@@ -34,29 +34,39 @@ class PluginController extends ClientApiController
      * 
      * @throws DisplayException
      */
-    public function index(Request $request): ?array
+    /**
+     * Handles GET requests to list plugins from the Spigot API.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws DisplayException
+     */
+    public function index(Request $request): JsonResponse
     {
         $query = $request->input('query');
-        if (!$query) return null;
+        if (!$query) {
+            throw new DisplayException('Query parameter is required.');
+        }
 
         $client = new Client();
-
-        $api = 'https://api.spiget.org/v2/search/resources/' . urlencode($query) .'?page=1&size=18';
+        $api = 'https://api.spiget.org/v2/search/resources/' . urlencode($query) . '?page=1&size=18';
 
         try {
-            $res = $client->request('GET', $api, ['headers' => ['User-Agent' => 'jexactyl/3.x']] );
-        } catch (DisplayException $e) {
+            $res = $client->request('GET', $api, [
+                'headers' => ['User-Agent' => 'creepercloud@contava/0.1x']
+            ]);
+        } catch (\Exception $e) {
             throw new DisplayException('Couldn\'t find any results for that query.');
-        };
+        }
 
         $plugins = json_decode($res->getBody(), true);
 
-        return [
+        return response()->json([
             'success' => true,
             'data' => [
                 'plugins' => $plugins,
             ],
-        ];
+        ]);
     }
 
     /**

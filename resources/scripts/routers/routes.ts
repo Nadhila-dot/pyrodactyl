@@ -18,6 +18,7 @@ import ShellContainer from '@/components/server/shell/ShellContainer';
 import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
 import AdminContainer from '@/components/Admin/AdminContainer';
+import PluginContainer from '@/components/server/addons/PluginContainer';
 
 // Each of the router files is already code split out appropriately — so
 // all the items above will only be loaded in when that router is loaded.
@@ -177,6 +178,13 @@ export default {
             permission: 'startup.software',
             name: 'Software',
             component: ShellContainer,
+        },
+        {
+            route: 'plugins/*',
+            path: 'plugins',
+            permission: 'file.*',
+            name: 'Plugins',
+            component: PluginContainer,
         },
         {
             route: 'mods/*',

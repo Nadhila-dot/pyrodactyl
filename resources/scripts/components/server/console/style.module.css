@@ -22,7 +22,7 @@
 
 
 .chart_container {
-    @apply relative rounded-xl border-[1px] border-emerald-500 bg-black;
+    @apply relative rounded-xl  bg-black;
 }
 
 

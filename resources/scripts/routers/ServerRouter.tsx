@@ -49,7 +49,8 @@ import {
     IconPencil,
     IconDeviceGamepad2,
     IconUserShield,
-    IconHome
+    IconHome,
+    IconPuzzle
 } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 
@@ -579,6 +580,24 @@ const ServerRouter = () => {
                                                     >
                                                         <IconSettings size={18} className="xl:w-[19px] xl:h-[19px]" />
                                                         <span className="font-medium text-sm xl:text-sm">Settings</span>
+                                                    </NavLink>
+                                                </li>
+                                            </Can>
+
+                                            <Can action={'file.*'} matchAny>
+                                                <li>
+                                                    <NavLink
+                                                        to={`/server/${id}/plugins`}
+                                                        className={({ isActive }) =>
+                                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                                                ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                                                : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                                            }`
+                                                        }
+                                                        ref={NavigationFiles}
+                                                    >
+                                                        <IconPuzzle size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                                        <span className="font-medium text-sm xl:text-sm">Plugins</span>
                                                     </NavLink>
                                                 </li>
                                             </Can>
