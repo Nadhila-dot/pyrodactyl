@@ -8,13 +8,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
 import FriendlyCaptcha from '@/components/FriendlyCaptcha';
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
-import Field from '@/components/elements/Field';
-
 import login from '@/api/auth/login';
-
 import useFlash from '@/plugins/useFlash';
+
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import FlashMessageRender from '../FlashMessageRender';
 
 interface Values {
     user: string;
@@ -24,12 +25,12 @@ interface Values {
 function LoginContainer() {
     const [token, setToken] = useState('');
     const [friendlyLoaded, setFriendlyLoaded] = useState(false);
-    const turnstileRef = useRef(null);
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
+    const turnstileRef = useRef<any>(null);
     const friendlyCaptchaRef = useRef<{ reset: () => void }>(null);
     const hCaptchaRef = useRef<HCaptcha>(null);
-    const mCaptchaRef = useRef<{ reset: () => void }>(null);
 
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
+    const { clearFlashes, clearAndAddHttpError, flashes } = useFlash();
     const { captcha } = useStoreState((state) => state.settings.data!);
     const isTurnstileEnabled = captcha.driver === 'turnstile' && captcha.turnstile?.siteKey;
     const isFriendlyEnabled = captcha.driver === 'friendly' && captcha.friendly?.siteKey;
@@ -40,6 +41,12 @@ function LoginContainer() {
 
     useEffect(() => {
         clearFlashes();
+
+        // Fetch logo from /nadhi/logo
+        fetch('/nadhi/logo')
+            .then(res => res.json())
+            .then(data => setLogoUrl(data.logo))
+            .catch(() => setLogoUrl(null));
 
         if (isFriendlyEnabled && !window.friendlyChallenge) {
             const script = document.createElement('script');
@@ -56,7 +63,7 @@ function LoginContainer() {
     const resetCaptcha = () => {
         setToken('');
         if (isTurnstileEnabled && turnstileRef.current) {
-            // @ts-expect-error - The type doesn't expose the reset method directly
+            // @ts-expect-error
             turnstileRef.current.reset();
         }
         if (isFriendlyEnabled && friendlyCaptchaRef.current) {
@@ -128,98 +135,153 @@ function LoginContainer() {
     };
 
     return (
-        <Formik
-            onSubmit={onSubmit}
-            initialValues={{ user: '', password: '' }}
-            validationSchema={object().shape({
-                user: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
-            })}
-        >
-            {({ isSubmitting }) => (
-                <LoginFormContainer className="w-full flex flex-col items-center justify-center bg-[#181818] border border-zinc-800 shadow-lg px-8 py-10" style={{ maxWidth: 400, margin: '0 auto', borderRadius: 0 }}>
-                    <h2 className="text-2xl font-bold mb-6 text-white tracking-tight">Sign in to your account</h2>
-                    <Field id="user" type="text" label="Username or Email" name="user" disabled={isSubmitting} inputClassName="bg-[#222] border-zinc-700 text-white" labelClassName="text-zinc-400" />
-                    <div className="relative mt-6 w-full">
-                        <Field
-                            id="password"
-                            type="password"
-                            label="Password"
-                            name="password"
-                            disabled={isSubmitting}
-                            inputClassName="bg-[#222] border-zinc-700 text-white"
-                            labelClassName="text-zinc-400"
-                        />
-                        <Link
-                            to="/auth/password"
-                            className="text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-400 absolute top-1 right-0"
-                        >
-                            Forgot Password?
-                        </Link>
-                    </div>
-
-                    {isTurnstileEnabled && (
-                        <div className="mt-6 w-full">
-                            <Turnstile
-                                ref={turnstileRef}
-                                siteKey={captcha.turnstile.siteKey}
-                                onSuccess={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('Turnstile')}
-                                onExpire={handleCaptchaExpire}
-                                options={{
-                                    theme: 'dark',
-                                    size: 'flexible',
-                                }}
-                            />
+        <div className="flex w-full items-center justify-center min-h-screen bg-black relative overflow-hidden">
+            {/* Logo background effect
+            
+            {logoUrl && (
+                <img
+                    src={logoUrl}
+                    alt="Logo"
+                    className="absolute bottom-[-40px] right-[-60px] w-[320px] h-[160px] object-cover opacity-25 pointer-events-none select-none"
+                    style={{
+                        transform: 'rotate(-15deg) scaleX(1.1)',
+                        clipPath: 'inset(50% 0 0 0)',
+                        zIndex: 0,
+                    }}
+                />
+            )}*/}
+            
+            {/* Flash message display */}
+            {flashes && flashes.length > 0 && (
+                <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 w-full max-w-lg">
+                    {flashes.map((flash, i) => (
+                        <div key={i} className="bg-red-700 text-white px-4 py-2 rounded mb-2 shadow">
+                            {flash.message || flash.error?.message || flash.detail || flash}
                         </div>
-                    )}
-
-                    {isFriendlyEnabled && friendlyLoaded && (
-                        <div className="mt-6 w-full">
-                            <FriendlyCaptcha
-                                ref={friendlyCaptchaRef}
-                                sitekey={captcha.friendly.siteKey}
-                                onComplete={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('FriendlyCaptcha')}
-                                onExpire={handleCaptchaExpire}
-                            />
-                        </div>
-                    )}
-
-                    {isHCaptchaEnabled && (
-                        <div className="mt-6 w-full">
-                            <HCaptcha
-                                ref={hCaptchaRef}
-                                sitekey={captcha.hcaptcha.siteKey}
-                                onVerify={handleCaptchaComplete}
-                                onError={() => handleCaptchaError('hCaptcha')}
-                                onExpire={handleCaptchaExpire}
-                                theme="dark"
-                                size="normal"
-                            />
-                        </div>
-                    )}
-
-                    {isMCaptchaEnabled && (
-                        <div className="mt-6 w-full">
-                            <p className="text-red-500">mCaptcha implementation needed</p>
-                        </div>
-                    )}
-
-                    <div className="mt-8 w-full">
-                        <Button
-                            className="w-full bg-[#222] text-white font-bold py-2 border-none shadow-none rounded-none hover:bg-[#333] transition"
-                            type="submit"
-                            size="xlarge"
-                            isLoading={isSubmitting}
-                            disabled={isSubmitting}
-                        >
-                            Login
-                        </Button>
-                    </div>
-                </LoginFormContainer>
+                    ))}
+                </div>
             )}
-        </Formik>
+            <Formik
+                onSubmit={onSubmit}
+                initialValues={{ user: '', password: '' }}
+                validationSchema={object().shape({
+                    user: string().required('A username or email must be provided.'),
+                    password: string().required('Please enter your account password.'),
+                })}
+            >
+                {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
+                    <form onSubmit={handleSubmit} className="w-full max-w-lg">
+                        <FlashMessageRender/>
+                        <Card className="bg-black border border-zinc-800 shadow-lg rounded-xl px-10 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
+                            <CardHeader>
+                                <CardTitle className="text-white text-2xl font-bold text-left">
+                                    Login to {window.company.name}
+                                </CardTitle>
+                                <div className="text-zinc-400 mb-4">
+                                    Enter your credentials to access your account
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-6">
+                                    <div>
+                                        <Label htmlFor="user" className="text-white font-medium">Username or Email</Label>
+                                        <Input
+                                            id="user"
+                                            name="user"
+                                            type="text"
+                                            value={values.user}
+                                            onChange={handleChange}
+                                            disabled={isSubmitting}
+                                            className="mt-2 bg-zinc-900 border border-zinc-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
+                                            autoComplete="username"
+                                        />
+                                        {touched.user && errors.user && (
+                                            <div className="text-red-500 text-xs mt-1">{errors.user}</div>
+                                        )}
+                                    </div>
+                                    <div className="relative">
+                                        <Label htmlFor="password" className="text-white font-medium">Password</Label>
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type="password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            disabled={isSubmitting}
+                                            className="mt-2 bg-zinc-900 border border-zinc-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
+                                            autoComplete="current-password"
+                                        />
+                                        <Link
+                                            to="/auth/password"
+                                            className="text-xs text-zinc-400 tracking-wide no-underline hover:text-emerald-500 absolute top-0 right-0 mt-1"
+                                        >
+                                            Forgot Password?
+                                        </Link>
+                                        {touched.password && errors.password && (
+                                            <div className="text-red-500 text-xs mt-1">{errors.password}</div>
+                                        )}
+                                    </div>
+                                    {isTurnstileEnabled && (
+                                        <div className="mt-4">
+                                            <Turnstile
+                                                ref={turnstileRef}
+                                                siteKey={captcha.turnstile.siteKey}
+                                                onSuccess={handleCaptchaComplete}
+                                                onError={() => handleCaptchaError('Turnstile')}
+                                                onExpire={handleCaptchaExpire}
+                                                options={{
+                                                    theme: 'dark',
+                                                    size: 'flexible',
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+                                    {isFriendlyEnabled && friendlyLoaded && (
+                                        <div className="mt-4">
+                                            <FriendlyCaptcha
+                                                ref={friendlyCaptchaRef}
+                                                sitekey={captcha.friendly.siteKey}
+                                                onComplete={handleCaptchaComplete}
+                                                onError={() => handleCaptchaError('FriendlyCaptcha')}
+                                                onExpire={handleCaptchaExpire}
+                                            />
+                                        </div>
+                                    )}
+                                    {isHCaptchaEnabled && (
+                                        <div className="mt-4">
+                                            <HCaptcha
+                                                ref={hCaptchaRef}
+                                                sitekey={captcha.hcaptcha.siteKey}
+                                                onVerify={handleCaptchaComplete}
+                                                onError={() => handleCaptchaError('hCaptcha')}
+                                                onExpire={handleCaptchaExpire}
+                                                theme="dark"
+                                                size="normal"
+                                            />
+                                        </div>
+                                    )}
+                                    {isMCaptchaEnabled && (
+                                        <div className="mt-4">
+                                            <p className="text-red-500">mCaptcha implementation needed</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button
+                                    className="w-full bg-emerald-600 text-white font-bold py-2 rounded-md hover:bg-emerald-700 transition"
+                                    type="submit"
+                                    size="lg"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'Logging in...' : 'Login'}
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </form>
+                )}
+            </Formik>
+        </div>
     );
 }
 

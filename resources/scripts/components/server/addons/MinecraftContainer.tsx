@@ -13,6 +13,7 @@ import PluginBlock from './PluginBlock';
 import Spinner from '@/components/elements/Spinner';
 import EmptyStateSvg from '@/assets/images/empty.svg';
 import ChangeButton from './ChangeButton';
+import ContentBox from '@/components/elements/ContentBox';
 
 const MinecraftPluginContainer = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -20,7 +21,7 @@ const MinecraftPluginContainer = () => {
     const { addError, clearFlashes } = useFlash();
     const [loading, setLoading] = useState(true);
     const [plugins, setPlugins] = useState<any[]>([]);
-    const [search, setSearch] = useState('Creepercloud');
+    const [search, setSearch] = useState('Change me!');
 
     // Debounced fetch function
     const fetchPlugins = useCallback(
@@ -78,7 +79,8 @@ const MinecraftPluginContainer = () => {
                             </For>
                         </PageListContainer>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-8">
+                        <ContentBox>
+                            <div className="flex flex-col items-center justify-center py-8">
                             <img
                                 src={EmptyStateSvg}
                                 alt="No plugins"
@@ -88,6 +90,7 @@ const MinecraftPluginContainer = () => {
                                 No Minecraft plugins found. Try searching for a specific plugin or check your server configuration.
                             </p>
                         </div>
+                        </ContentBox>
                     )}
                 </>
             )}

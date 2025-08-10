@@ -3,6 +3,8 @@ import installPlugin from '@/api/server/plugins/installPlugins';
 import Button from '@/components/elements/button/Button';
 import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
+import { Badge } from '@/components/ui/badge';
+
 
 interface PluginBlockProps {
     plugin: any;
@@ -45,6 +47,15 @@ const PluginBlock = ({ plugin }: PluginBlockProps) => {
                     <span>Downloads: {plugin.downloads}</span>
                     <span>Rating: {plugin.rating?.average?.toFixed(1) ?? 'N/A'}</span>
                 </div>
+                {plugin.testedVersions && plugin.testedVersions.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {plugin.testedVersions.map((version: string) => (
+                            <Badge key={version} variant="secondary" className="text-xs">
+                                {version}
+                            </Badge>
+                        ))}
+                    </div>
+                )}
             </div>
             <div className="flex flex-col items-end gap-2 ml-auto">
                 <Button

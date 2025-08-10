@@ -6,7 +6,7 @@ const Logo = () => {
     const [companyName, setCompanyName] = useState('Panel');
 
     useEffect(() => {
-        http.get('/api/client/logo')
+        http.get('/nadhi/logo')
             .then(res => {
                 if (res.data.logo) setLogoUrl(res.data.logo);
             })
