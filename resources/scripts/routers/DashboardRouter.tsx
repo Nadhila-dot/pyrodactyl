@@ -251,11 +251,11 @@ const DashboardRouter = () => {
                 {/* Sidebar Content */}
                 <div className="flex flex-col h-full p-4 xl:p-5">
                     {/* Header */}
-                    <div className='flex items-center justify-between mb-4 xl:mb-5'>
+                    <div className='flex items-center justify-between mb-4 xl:ml-3 lg:ml-3 xl:mb-5'>
                         <NavLink to={'/'} className='flex items-center'>
                             <div className="scale-100 xl:scale-105 transition-transform duration-200">
                                 <Logo />
-                                <Separator className="max-w-1/2 mt-4" />
+                                <Separator className="max-w-1/2 mt-3" />
                             </div>
                         </NavLink>
                         

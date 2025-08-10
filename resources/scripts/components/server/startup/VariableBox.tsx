@@ -72,7 +72,7 @@ const VariableBox = ({ variable }: Props) => {
 
     return (
         <div
-            className={`flex flex-col justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg`}
+            className={`flex flex-col justify-between gap-2 bg-black border-[1px] border-[#ffffff0e] p-4 rounded-lg`}
         >
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className={`text-sm mb-2`}>

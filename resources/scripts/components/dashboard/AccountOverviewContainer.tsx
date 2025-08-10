@@ -6,6 +6,7 @@ import UpdateEmailAddressForm from '@/components/dashboard/forms/UpdateEmailAddr
 import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm';
 import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
+import ThemeSettings from '@/components/dashboard/forms/ThemeSettings';
 
 import Code from '../elements/Code';
 
@@ -22,29 +23,37 @@ const AccountOverviewContainer = () => {
             )}
 
             <div className='flex flex-col w-full h-full gap-4'>
-                <h2 className='mt-8 font-extrabold text-2xl'>Account Information</h2>
-                <ContentBox title={'Email Address'} showFlashes={'account:email'}>
-                    <UpdateEmailAddressForm />
-                </ContentBox>
-                <h2 className='mt-8 font-extrabold text-2xl'>Password and Authentication</h2>
-                <ContentBox title={'Account Password'} showFlashes={'account:password'}>
-                    <UpdatePasswordForm />
-                </ContentBox>
-                <ContentBox title={'Multi-Factor Authentication'}>
-                    <ConfigureTwoFactorForm />
-                </ContentBox>
-                <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
-                <ContentBox title={'Panel Version'}>
-                    <p className='text-sm mb-4'>
-                        This is useful to provide Pyro staff if you run into an unexpected issue.
-                    </p>
-                    <div className='flex flex-col gap-4'>
-                        <Code>
-                            Version: {import.meta.env.VITE_PYRODACTYL_VERSION} - {import.meta.env.VITE_BRANCH_NAME}
-                        </Code>
-                        <Code>Commit : {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
+                <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex-1 flex flex-col gap-4">
+                        <h2 className='mt-8 font-extrabold text-2xl'>Account Information</h2>
+                        <ContentBox title={'Email Address'} showFlashes={'account:email'}>
+                            <UpdateEmailAddressForm />
+                        </ContentBox>
+                        <h2 className='mt-8 font-extrabold text-2xl'>Password and Authentication</h2>
+                        <ContentBox title={'Account Password'} showFlashes={'account:password'}>
+                            <UpdatePasswordForm />
+                        </ContentBox>
+                        <ContentBox title={'Multi-Factor Authentication'}>
+                            <ConfigureTwoFactorForm />
+                        </ContentBox>
+                        <h2 className='mt-8 font-extrabold text-2xl'>App</h2>
+                        <ContentBox title={'Panel Version'}>
+                            <p className='text-sm mb-4'>
+                                Useful debugging for developers and administrators.
+                            </p>
+                            <div className='flex flex-col gap-4'>
+                                <Code>
+                                    Version: {import.meta.env.VITE_PYRODACTYL_VERSION} - {import.meta.env.VITE_BRANCH_NAME}
+                                </Code>
+                                <Code>Commit : {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
+                            </div>
+                        </ContentBox>
                     </div>
-                </ContentBox>
+                    <div className="flex-1 flex flex-col gap-4">
+                        <h2 className='mt-8 font-extrabold text-2xl'>Theme Settings</h2>
+                        <ThemeSettings />
+                    </div>
+                </div>
             </div>
         </PageContentBlock>
     );
