@@ -55,7 +55,7 @@ interface ConsoleProps {
 }
 
 const Console = ({ status: _status }: ConsoleProps) => {
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@creepercloud~ \u001b[0m';
+    const [companyName, setCompanyName] = useState('pterodactyl');
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
     const fitAddon = new FitAddon();
@@ -68,8 +68,18 @@ const Console = ({ status: _status }: ConsoleProps) => {
     const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
     const [historyIndex, setHistoryIndex] = useState(-1);
 
-    // Get server status from context (like StatusPill)
+    // Get server status from context
     const serverStatus = ServerContext.useStoreState((state) => state.status.value);
+
+    // Get company name from window object if available
+    useEffect(() => {
+        if (window.company && window.company.name) {
+            // Convert to lowercase and remove spaces for terminal username format
+            setCompanyName(window.company.name.toLowerCase().replace(/\s+/g, ''));
+        }
+    }, []);
+
+    const TERMINAL_PRELUDE = `\u001b[1m\u001b[33mcontainer@${companyName}~ \u001b[0m`;
 
     const handleConsoleOutput = (line: string, prelude = false) =>
         terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
