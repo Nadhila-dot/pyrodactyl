@@ -220,7 +220,7 @@ const DashboardRouter = () => {
             )}
             <button
                 id='sidebarToggle'
-                className='lg:hidden fixed flex items-center justify-center top-5 left-5 z-50 bg-black p-3 rounded-lg text-white shadow-lg hover:bg-zinc-900 transition-colors duration-200 cursor-pointer'
+                className='lg:hidden fixed flex items-center justify-center top-5 left-2 z-50 bg-black p-3 rounded-lg text-white shadow-lg hover:bg-zinc-900 transition-colors duration-200 cursor-pointer'
                 onClick={toggleSidebar}
                 aria-label='Toggle sidebar'
             >
@@ -255,7 +255,7 @@ const DashboardRouter = () => {
                         <NavLink to={'/'} className='flex items-center'>
                             <div className="scale-100 xl:scale-105 transition-transform duration-200">
                                 <Logo />
-                                <Separator className="max-w-1/2 mt-3" />
+                                <Separator className="max-w-1/3 mt-3 mr-2 opacity-25" />
                             </div>
                         </NavLink>
                         
