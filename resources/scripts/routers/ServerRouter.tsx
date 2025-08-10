@@ -397,7 +397,7 @@ const ServerRouter = () => {
                                 <NavLink to={'/'} className='flex items-center'>
                                     <div className="scale-100 xl:scale-105 transition-transform duration-200">
                                         <Logo />
-                                        <Separator className="max-w-1/2 mt-3 ml" />
+                                        <Separator className="max-w-1/3 mt-3 mr-2 opacity-25" />
                                     </div>
                                 </NavLink>
                             </div>
