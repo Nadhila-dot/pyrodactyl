@@ -9,8 +9,10 @@ import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
+import getPlugins from '@/api/server/plugins/getPlugins';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
+
 
 // const getBackgroundColor = (value: number, max: number | null): string | undefined => {
 //     const delta = !max ? 0 : value / max;
@@ -32,10 +34,13 @@ const Limit = ({ limit, children }: { limit: string | null; children: React.Reac
 const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const [stats, setStats] = useState<Stats>({ memory: 0, cpu: 0, disk: 0, uptime: 0, tx: 0, rx: 0 });
 
+
     const status = ServerContext.useStoreState((state) => state.status.value);
     const connected = ServerContext.useStoreState((state) => state.socket.connected);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
+    
+    
 
     const textLimits = useMemo(
         () => ({

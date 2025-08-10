@@ -13,10 +13,13 @@ class PullFileRequest extends ClientApiRequest implements ClientPermissionsReque
         return Permission::ACTION_FILE_CREATE;
     }
 
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
-            'url' => 'required|string|url',
+            'url' => 'sometimes|string|url',
             'directory' => 'nullable|string',
             'filename' => 'nullable|string',
             'use_header' => 'boolean',

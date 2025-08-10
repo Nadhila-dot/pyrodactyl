@@ -11,7 +11,6 @@ import FriendlyCaptcha from '@/components/FriendlyCaptcha';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import Field from '@/components/elements/Field';
-import Logo from '@/components/elements/PyroLogo';
 
 import login from '@/api/auth/login';
 
@@ -42,7 +41,6 @@ function LoginContainer() {
     useEffect(() => {
         clearFlashes();
 
-        // Load FriendlyCaptcha script if needed
         if (isFriendlyEnabled && !window.friendlyChallenge) {
             const script = document.createElement('script');
             script.src = 'https://unpkg.com/friendly-challenge@0.9.12/widget.module.min.js';
@@ -116,13 +114,6 @@ function LoginContainer() {
                 navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
             })
             .catch((error: any) => {
-                console.error('Login error details:', {
-                    message: error.message,
-                    detail: error.detail,
-                    code: error.code,
-                    response: error.response,
-                });
-
                 resetCaptcha();
                 setSubmitting(false);
 
@@ -146,32 +137,29 @@ function LoginContainer() {
             })}
         >
             {({ isSubmitting }) => (
-                <LoginFormContainer className={`w-full flex`}>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        <Logo />
-                    </div>
-                    <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                    <h2 className='text-xl font-extrabold mb-2'>Login</h2>
-                    <Field id='user' type={'text'} label={'Username or Email'} name={'user'} disabled={isSubmitting} />
-                    <div className={`relative mt-6`}>
+                <LoginFormContainer className="w-full flex flex-col items-center justify-center bg-[#181818] border border-zinc-800 shadow-lg px-8 py-10" style={{ maxWidth: 400, margin: '0 auto', borderRadius: 0 }}>
+                    <h2 className="text-2xl font-bold mb-6 text-white tracking-tight">Sign in to your account</h2>
+                    <Field id="user" type="text" label="Username or Email" name="user" disabled={isSubmitting} inputClassName="bg-[#222] border-zinc-700 text-white" labelClassName="text-zinc-400" />
+                    <div className="relative mt-6 w-full">
                         <Field
-                            id='password'
-                            type={'password'}
-                            label={'Password'}
-                            name={'password'}
+                            id="password"
+                            type="password"
+                            label="Password"
+                            name="password"
                             disabled={isSubmitting}
+                            inputClassName="bg-[#222] border-zinc-700 text-white"
+                            labelClassName="text-zinc-400"
                         />
                         <Link
-                            to={'/auth/password'}
-                            className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
+                            to="/auth/password"
+                            className="text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-400 absolute top-1 right-0"
                         >
                             Forgot Password?
                         </Link>
                     </div>
 
-                    {/* CAPTCHA Providers */}
                     {isTurnstileEnabled && (
-                        <div className='mt-6'>
+                        <div className="mt-6 w-full">
                             <Turnstile
                                 ref={turnstileRef}
                                 siteKey={captcha.turnstile.siteKey}
@@ -187,7 +175,7 @@ function LoginContainer() {
                     )}
 
                     {isFriendlyEnabled && friendlyLoaded && (
-                        <div className='mt-6 w-full'>
+                        <div className="mt-6 w-full">
                             <FriendlyCaptcha
                                 ref={friendlyCaptchaRef}
                                 sitekey={captcha.friendly.siteKey}
@@ -199,30 +187,30 @@ function LoginContainer() {
                     )}
 
                     {isHCaptchaEnabled && (
-                        <div className='mt-6'>
+                        <div className="mt-6 w-full">
                             <HCaptcha
                                 ref={hCaptchaRef}
                                 sitekey={captcha.hcaptcha.siteKey}
                                 onVerify={handleCaptchaComplete}
                                 onError={() => handleCaptchaError('hCaptcha')}
                                 onExpire={handleCaptchaExpire}
-                                theme='dark'
-                                size='normal'
+                                theme="dark"
+                                size="normal"
                             />
                         </div>
                     )}
 
                     {isMCaptchaEnabled && (
-                        <div className='mt-6'>
-                            <p className='text-red-500'>mCaptcha implementation needed</p>
+                        <div className="mt-6 w-full">
+                            <p className="text-red-500">mCaptcha implementation needed</p>
                         </div>
                     )}
 
-                    <div className={`mt-6`}>
+                    <div className="mt-8 w-full">
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
-                            type={'submit'}
-                            size={'xlarge'}
+                            className="w-full bg-[#222] text-white font-bold py-2 border-none shadow-none rounded-none hover:bg-[#333] transition"
+                            type="submit"
+                            size="xlarge"
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
