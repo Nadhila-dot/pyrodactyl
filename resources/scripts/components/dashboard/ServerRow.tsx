@@ -50,14 +50,13 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     if (!isSuspended && server.allocations.length > 0) {
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
-        getPlayers(allocation.ip_alias, allocation.port)
+        const ipToUse = allocation.ip_alias || allocation.ip;
+        getPlayers(ipToUse, allocation.port)
           .then((data) => {
             if (data?.list && data.list.length > 0) setPlayers(data.list);
             else setPlayers([]);
           })
-          .catch(() => setPlayers([])
-
-          );
+          .catch(() => setPlayers([]));
       }
     } else {
       setPlayers([]);
