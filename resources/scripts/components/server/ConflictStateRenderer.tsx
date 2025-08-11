@@ -13,12 +13,16 @@ const ConflictStateRenderer = () => {
 
     return status === 'installing' || status === 'install_failed' || status === 'reinstall_failed' ? (
         <div className={'flex flex-col items-center justify-center h-full'}>
-            <Spinner size={'large'} />
+            <img
+            src="https://media.tenor.com/d2j7YdyhtmsAAAAi/shikanoko-dance-shikanoko-meme.gif"
+            alt="Installing"
+            className="rounded-lg w-24 h-24"
+            />
             <div className='flex flex-col mt-4 text-center'>
-                <label className='text-neutral-100 text-lg font-bold'>Server is Installing - This is not an Error!</label>
-                <label className='text-neutral-500 text-md font-semibold mt-1'>
-                    Your server should be ready soon, for more details visit the home page. This is not an error! Please wait.
-                </label>
+            <label className='text-neutral-100 text-lg font-bold'>Server's getting ready!</label>
+            <label className='text-neutral-500 text-md font-semibold mt-1'>
+                Your server should be ready soon, until then please wait patiently. You wouldn't rush a bride would you?
+            </label>
             </div>
         </div>
     ) : status === 'suspended' ? (

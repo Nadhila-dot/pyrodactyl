@@ -124,7 +124,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 .filter((alloc) => alloc.isDefault)
                 .map((allocation) => (
                   <Fragment key={allocation.ip + allocation.port.toString()}>
-                    {(allocation.ip_alias || allocation.alias || ip(allocation.ip))}:{allocation.port}
+                    {(allocation.alias || allocation.alias || ip(allocation.ip))}:{allocation.port}
                   </Fragment>
                 ))}
             </p>
