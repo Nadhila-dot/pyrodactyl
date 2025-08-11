@@ -61,6 +61,7 @@
         "events": "^3.3.0",
         "formik": "^2.4.6",
         "globals": "^16.3.0",
+        "input-otp": "^1.4.2",
         "install": "^0.13.0",
         "laravel-vite-plugin": "^2.0.0",
         "lucide-react": "^0.539.0",

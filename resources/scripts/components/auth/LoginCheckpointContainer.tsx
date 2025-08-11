@@ -4,22 +4,17 @@ import { useState } from 'react';
 import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
-import ContentBox from '@/components/elements/ContentBox';
-import Field from '@/components/elements/Field';
-
+import { Card, CardContent } from "@/components/ui/card";
 import loginCheckpoint from '@/api/auth/loginCheckpoint';
-
 import type { FlashStore } from '@/state/flashes';
-
 import useFlash from '@/plugins/useFlash';
-
 import Logo from '../elements/PyroLogo';
+import CustomOTPInput from './CustomOTP';
 
 interface Values {
     code: string;
-    recoveryCode: '';
+    recoveryCode: string;
 }
 
 type OwnProps = RouteProps;
@@ -29,80 +24,78 @@ type Props = OwnProps & {
 };
 
 function LoginCheckpointForm() {
-    const { isSubmitting, setFieldValue } = useFormikContext<Values>();
+    const { isSubmitting, setFieldValue, values, handleSubmit } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <ContentBox className='p-12 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl'>
-            <LoginFormContainer className={`w-full flex`}>
-                <Link to='/'>
-                    <div className='flex h-12 mb-4 items-center w-full'>
-                        <Logo />
-                    </div>
-                </Link>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
+        <Card className="p-8 border-zinc-800 bg-black shadow-xl rounded-xl">
+            <CardContent>
+                <form className="w-full flex flex-col items-center" onSubmit={handleSubmit}>
+                    <Link to='/'>
+                        <div className='flex h-12 mb-4 items-center w-full justify-center'>
+                            <Logo />
+                        </div>
+                    </Link>
+                    <h2 className='text-2xl font-extrabold mb-2 text-white'>Two Factor Authentication</h2>
+                    
 
-                <div className={`mt-6`}>
-                    <Field
-                        name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
-                        placeholder='6969420'
-                        description={
-                            isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
-                        }
-                        type={'text'}
-                        autoComplete={'one-time-code'}
-                        autoFocus
-                    />
-                </div>
-                <div className={`mt-6`}>
+                    <div className="w-full flex flex-col items-center">
+                        {!isMissingDevice ? (
+                            <CustomOTPInput
+                                value={values.code}
+                                onChange={val => setFieldValue('code', val)}
+                                length={6}
+                                disabled={isSubmitting}
+                            />
+                        ) : (
+                            <input
+                                name="recoveryCode"
+                                type="text"
+                                value={values.recoveryCode}
+                                onChange={e => setFieldValue('recoveryCode', e.target.value)}
+                                placeholder="Enter recovery code"
+                                className="w-full px-4 py-2 rounded-md border border-emerald-600 bg-black text-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                                autoFocus
+                            />
+                        )}
+                        <div className="mt-2 text-xs font-black text-white text-center">
+                            {isMissingDevice
+                                ? 'Enter one of your recovery codes to continue.'
+                                : 'Enter the 2FA code from your device.'}
+                        </div>
+                    </div>
                     <Button
-                        className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                        size={'xlarge'}
-                        type={'submit'}
+                        className="w-full mt-6 rounded-full bg-emerald-600 hover:bg-emerald-700 border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 text-white"
+                        size="xlarge"
+                        type="submit"
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >
                         Login
                     </Button>
-                </div>
-                <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-
-                <div
-                    className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}
-                >
-                    <span
+                   
+                    <Button
+                        type="button"
+                        className="w-full mt-2 text-center py-2.5 px-4 text-xs font-bold tracking-wide uppercase text-white transition-colors duration-200 border border-emerald-600 rounded-full bg-emerald-600 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
                         onClick={() => {
                             setFieldValue('code', '');
                             setFieldValue('recoveryCode', '');
-                            setIsMissingDevice((s) => !s);
+                            setIsMissingDevice(s => !s);
                         }}
-                        // className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
                     >
                         {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
-                    </span>
-                </div>
-                <div
-                    className={`text-center w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
-                >
-                    <Link
-                        to={'/auth/login'}
-                        className={
-                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                        }
+                    </Button>
+                    
+                    <Button
+                        type="button"
+                        className="w-full mt-2 text-center bg-emerald-600 hover:bg-emerald-400 py-2.5 px-4 text-xs font-bold tracking-wide uppercase text-white transition-colors duration-200 border border-emerald-600 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                        onClick={() => window.location.href = '/auth/login'}
                     >
                         Return to Login
-                    </Link>
-                </div>
-            </LoginFormContainer>
-        </ContentBox>
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
     );
 }
 
@@ -114,7 +107,6 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
                     window.location = response.intended || '/';
                     return;
                 }
-
                 setSubmitting(false);
             })
             .catch((error) => {
@@ -123,7 +115,6 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
                 clearAndAddHttpError({ error });
             });
     },
-
     mapPropsToValues: () => ({
         code: '',
         recoveryCode: '',
@@ -132,13 +123,11 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
 
 const LoginCheckpointContainer = ({ ...props }: OwnProps) => {
     const { clearAndAddHttpError } = useFlash();
-
     const location = useLocation();
     const navigate = useNavigate();
 
     if (!location.state?.token) {
         navigate('/auth/login');
-
         return null;
     }
 
