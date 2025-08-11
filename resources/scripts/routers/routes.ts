@@ -19,6 +19,7 @@ import StartupContainer from '@/components/server/startup/StartupContainer';
 import UsersContainer from '@/components/server/users/UsersContainer';
 import AdminContainer from '@/components/Admin/AdminContainer';
 import PluginContainer from '@/components/server/addons/PluginContainer';
+import ThemeContainer from '@/components/dashboard/ThemeContainer';
 
 // Each of the router files is already code split out appropriately — so
 // all the items above will only be loaded in when that router is loaded.
@@ -92,6 +93,15 @@ export default {
             path: '',
             name: 'Admin',
             component: AdminContainer,
+            end: true,
+        },
+    ],
+    theme: [
+        {
+            route: '',
+            path: '',
+            name: 'Theme',
+            component: ThemeContainer,
             end: true,
         },
     ],

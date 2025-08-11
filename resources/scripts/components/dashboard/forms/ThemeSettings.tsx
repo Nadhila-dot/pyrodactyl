@@ -9,6 +9,8 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Button } from '@/components/elements/button/index';
 import { toast } from 'sonner';
 
+import FontSettings from './FontSettings';
+
 interface Values {
     bgImage: string;
 }
@@ -39,7 +41,7 @@ const ThemeSettings = () => {
             >
                 {({ isSubmitting }) => (
                     <Form className='space-y-6'>
-                         <SpinnerOverlay visible={isSubmitting || isSubmitting} />
+                        <SpinnerOverlay visible={isSubmitting || isSubmitting} />
 
                         <FormikFieldWrapper
                             label='Background Image URL'
@@ -54,9 +56,16 @@ const ThemeSettings = () => {
                                 {isSubmitting ? 'Saving...' : 'Save Background'}
                             </Button>
                         </div>
+
+                        {/* Font settings imported from FontSettings component */}
+                        
                     </Form>
+
+                    
                 )}
             </Formik>
+
+        
         </ContentBox>
     );
 };

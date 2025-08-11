@@ -24,11 +24,12 @@ import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 import { Player } from '@lordicon/react';
-import { IconKey, IconLinkPlus, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
+import { IconBrandUnsplash, IconBrush, IconKey, IconLinkPlus, IconPalette, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
 
 import http from '@/api/http';
 import Footer from '@/components/Footer/footer';
 import { Separator } from '@/components/ui/separator';
+import ThemeContainer from '@/components/dashboard/ThemeContainer';
 
 const DashboardRouter = () => {
     const location = useLocation();
@@ -251,18 +252,17 @@ const DashboardRouter = () => {
                 {/* Sidebar Content */}
                 <div className="flex flex-col h-full p-4 xl:p-5">
                     {/* Header */}
-                    <div className='flex items-center justify-between mb-4 xl:ml-3 lg:ml-3 xl:mb-5'>
-                        <NavLink to={'/'} className='flex items-center'>
-                            <div className="scale-100 xl:scale-105 transition-transform duration-200">
+                    <div className='flex items-center justify-between mb-4 xl:mb-5'>
+                        <NavLink to={'/'} className='flex items-center w-full justify-start'>
+                            <div className="scale-100 xl:scale-105 transition-transform duration-200 ml-1">
                                 <Logo />
-                                <Separator className="max-w-1/3 mt-3 mr-2 opacity-25" />
+                                <Separator className="mt-3 mr-2 max-w-1/3 opacity-25" />
                             </div>
                         </NavLink>
-                        
                     </div>
-                    
 
-                    
+
+
 
                     {/* Welcome Message */}
                     <div className="mb-8 xl:mb-9">
@@ -274,14 +274,14 @@ const DashboardRouter = () => {
 
 
                     {/* Navigation */}
-                    <nav className="flex-1">
-                        <ul className='space-y-1 xl:space-y-1.5' onClick={toggleSidebar}>
+                    <nav className="flex-1 pr-2">
+                        <ul className='space-y-1.5 xl:space-y-2 pr-3' onClick={toggleSidebar}>
                             <li>
                                 <NavLink
                                     to={'/'}
                                     end
                                     className={({ isActive }) =>
-                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                             ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                             : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                         }`
@@ -292,12 +292,13 @@ const DashboardRouter = () => {
                                     <span className="font-medium text-sm xl:text-sm">Servers</span>
                                 </NavLink>
                             </li>
+
                             <li>
                                 <NavLink
                                     to={'/account/api'}
                                     end
                                     className={({ isActive }) =>
-                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                             ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                             : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                         }`
@@ -313,7 +314,7 @@ const DashboardRouter = () => {
                                     to={'/account/ssh'}
                                     end
                                     className={({ isActive }) =>
-                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                             ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                             : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                         }`
@@ -329,7 +330,7 @@ const DashboardRouter = () => {
                                     to={'/account'}
                                     end
                                     className={({ isActive }) =>
-                                        `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                             ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                             : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                         }`
@@ -340,13 +341,29 @@ const DashboardRouter = () => {
                                     <span className="font-medium text-sm xl:text-sm">Settings</span>
                                 </NavLink>
                             </li>
+                            <li>
+                                <NavLink
+                                    to={'/theme'}
+                                    end
+                                    className={({ isActive }) =>
+                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
+                                            : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
+                                        }`
+                                    }
+                                    ref={NavigationHome}
+                                >
+                                    <IconPalette size={18} className="xl:w-[19px] xl:h-[19px]" />
+                                    <span className="font-medium text-sm xl:text-sm">Coustmize</span>
+                                </NavLink>
+                            </li>
                             {rootAdmin && (
                                 <li>
                                     <NavLink
                                         to={'/admin'}
                                         end
                                         className={({ isActive }) =>
-                                            `flex items-center space-x-3 xl:space-x-3.5 px-3 xl:px-3.5 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                            `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                                 ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                                 : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                             }`
@@ -379,7 +396,7 @@ const DashboardRouter = () => {
                                             {user?.username || 'User'}
                                         </div>
                                         <div className="text-xs xl:text-xs text-gray-400 truncate">
-                                            {user?.email || 'user@panel.com'}
+                                            {user?.email || 'user@creepercloud.io'}
                                         </div>
                                     </div>
                                     <div className="w-2 h-2 xl:w-2 xl:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
@@ -414,6 +431,8 @@ const DashboardRouter = () => {
                     >
                         <Routes>
                             <Route path='' element={<DashboardContainer />} />
+
+                            <Route path='/theme' element={<ThemeContainer />} />
 
                             {/* Account Routes */}
                             {routes.account.map(({ route, component: Component }) => (

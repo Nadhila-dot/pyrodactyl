@@ -43,25 +43,13 @@ Made with love! (Main repo PYRO)
                 </script>
             @endif
         @show
+       
         <style>
-            @import url('https://fonts.bunny.net/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap')
+            html, body, * {
+                font-family: var(--main-font, 'Space Grotesk', sans-serif) !important;
+            }
         </style>
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Climate+Crisis&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="stylesheet" href="style.css" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-          rel="stylesheet"
-        ></link>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Codystar&family=Rationale&family=Sigmar&display=swap"
-          rel="stylesheet"
-        ></link>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"></link>
-
+        
         @yield('assets')
 
         @include('layouts.scripts')

@@ -22,7 +22,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
         'flex',
         direction === 'row' ? 'items-center flex-col md:flex-row' : 'items-start flex-col',
         'justify-between',
-        'mb-8 gap-8 mt-8 md:mt-0 select-none !font-[Space Grotesk]',
+        'mb-8 gap-8 mt-8 md:mt-0 select-none //font-fix',
     )}
 >
     <div className='flex items-center gap-4 flex-wrap'>

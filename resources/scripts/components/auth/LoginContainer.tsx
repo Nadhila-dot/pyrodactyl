@@ -276,6 +276,9 @@ function LoginContainer() {
                                 >
                                     {isSubmitting ? 'Logging in...' : 'Login'}
                                 </Button>
+                                <span className='dark:text-white'>
+                                    Powered by Contava
+                                </span>
                             </CardFooter>
                         </Card>
                     </form>

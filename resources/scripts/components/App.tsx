@@ -6,7 +6,7 @@ import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
@@ -54,6 +54,22 @@ const App = () => {
             updatedAt: new Date(PterodactylUser.updated_at),
         });
     }
+
+    useEffect(() => {
+    const fontFamily = localStorage.getItem('FONT_MAIN_PAGE');
+    if (fontFamily) {
+        // Remove ALL previous font links with this ID
+        document.querySelectorAll('link[id="custom-google-font"]').forEach(el => el.remove());
+        // Add new font link (Google Fonts v2 API)
+        const link = document.createElement('link');
+        link.id = 'custom-google-font';
+        link.rel = 'stylesheet';
+        link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}&display=swap`;
+        document.head.appendChild(link);
+        // Apply font globally via CSS variable
+        document.documentElement.style.setProperty('--main-font', `'${fontFamily.replace(/\+/g, ' ')}', sans-serif`);
+    }
+}, []);
 
     if (!store.getState().settings.data) {
         store.getActions().settings.setSettings(SiteConfiguration!);

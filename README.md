@@ -1,5 +1,8 @@
 plugin data
 
+
+# Add a player count to panel. 
+
 {
     "success": true,
     "data": {

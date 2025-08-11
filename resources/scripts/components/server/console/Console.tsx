@@ -221,7 +221,7 @@ const Console = ({ status: _status }: ConsoleProps) => {
                         {serverStatus === 'fetching' && (
                             <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/50">
                                 <Spinner size="large" />
-                                <p className="mt-4 text-sm text-gray-300 !font-[Poppins]">Getting things ready..</p>
+                                <p className="mt-4 text-sm text-gray-300 //font">Getting things ready..</p>
                             </div>
                         )}
                     </div>

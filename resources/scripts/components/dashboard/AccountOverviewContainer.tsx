@@ -9,6 +9,7 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import ThemeSettings from '@/components/dashboard/forms/ThemeSettings';
 
 import Code from '../elements/Code';
+import FontSettings from './forms/FontSettings';
 
 const AccountOverviewContainer = () => {
     const { state } = useLocation();
@@ -49,10 +50,8 @@ const AccountOverviewContainer = () => {
                             </div>
                         </ContentBox>
                     </div>
-                    <div className="flex-1 flex flex-col gap-4">
-                        <h2 className='mt-8 font-extrabold text-2xl'>Theme Settings</h2>
-                        <ThemeSettings />
-                    </div>
+                    
+                    
                 </div>
             </div>
         </PageContentBlock>
