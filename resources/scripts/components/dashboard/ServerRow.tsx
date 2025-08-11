@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import { bytesToString, ip } from "@/lib/formatters"
 import type { Server } from "@/api/server/getServer"
 import getServerResourceUsage, { type ServerStats } from "@/api/server/getServerResourceUsage"
+import { getPlayers } from "@/api/minecraft/getPlayers"
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
@@ -18,6 +19,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended")
   const [stats, setStats] = useState<ServerStats | null>(null)
+  const [players, setPlayers] = useState<PlayerInfo[]>([])
 
   const getStats = () =>
     getServerResourceUsage(server.uuid)
@@ -31,6 +33,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   useEffect(() => {
     // Don't waste a HTTP request if there is nothing important to show to the user because
     // the server is suspended.
+    // nadhi - Oh you fucking thing your amazing for this ryt? cunty bitch
     if (isSuspended) return
 
     getStats().then(() => {
@@ -41,6 +44,26 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
       if (interval.current) clearInterval(interval.current)
     }
   }, [isSuspended])
+
+  useEffect(() => {
+    // Only fetch players if the server is running and has a Minecraft allocation
+    if (!isSuspended && server.allocations.length > 0) {
+      const allocation = server.allocations.find(a => a.isDefault);
+      if (allocation) {
+        getPlayers(allocation.ip, allocation.port)
+          .then((data) => {
+            if (data?.list && data.list.length > 0) setPlayers(data.list);
+            else setPlayers([]);
+          })
+          .catch(() => setPlayers([])
+        
+        );
+      }
+    } else {
+      setPlayers([]);
+      console.warn("Skipping player fetch: server is suspended or has no default allocation.");
+    }
+  }, [isSuspended, server.allocations]);
 
   const alarms = { cpu: false, memory: false, disk: false }
   if (stats) {
@@ -104,6 +127,21 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                   </Fragment>
                 ))}
             </p>
+
+            {/* Player badges */}
+            {players.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {players.map(player => (
+                  <span
+                    key={player.uuid}
+                    className="bg-emerald-700/80 text-white text-xs px-2 py-1 rounded-full font-medium"
+                    title={player.uuid}
+                  >
+                    {player.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -140,9 +178,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
               <div className="flex flex-col items-center gap-1">
                 <span className={`text-xs font-medium ${isRunning ? "text-white/60" : "text-white/40"}`}>CPU</span>
                 <span
-                  className={`text-sm font-semibold ${
-                    alarms.cpu ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
-                  }`}
+                  className={`text-sm font-semibold ${alarms.cpu ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
+                    }`}
                 >
                   {stats.cpuUsagePercent.toFixed(1)}%
                 </span>
@@ -152,9 +189,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
               <div className="flex flex-col items-center gap-1">
                 <span className={`text-xs font-medium ${isRunning ? "text-white/60" : "text-white/40"}`}>RAM</span>
                 <span
-                  className={`text-sm font-semibold ${
-                    alarms.memory ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
-                  }`}
+                  className={`text-sm font-semibold ${alarms.memory ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
+                    }`}
                 >
                   {bytesToString(stats.memoryUsageInBytes, 0)}
                 </span>
@@ -164,9 +200,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
               <div className="flex flex-col items-center gap-1">
                 <span className={`text-xs font-medium ${isRunning ? "text-white/60" : "text-white/40"}`}>Storage</span>
                 <span
-                  className={`text-sm font-semibold ${
-                    alarms.disk ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
-                  }`}
+                  className={`text-sm font-semibold ${alarms.disk ? "text-red-400" : isRunning ? "text-white" : "text-white/80"
+                    }`}
                 >
                   {bytesToString(stats.diskUsageInBytes, 0)}
                 </span>
