@@ -129,18 +129,29 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 ))}
             </p>
 
-            {/* Player badges */}
-            {players.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {players.map(player => (
-                  <span
-                    key={player.uuid}
-                    className="bg-emerald-700/80 text-white text-xs px-2 py-1 rounded-full font-medium"
-                    title={player.uuid}
-                  >
-                    {player.name}
-                  </span>
-                ))}
+            {/* Player badges and count
+            // Typescript is going to crazy seeing this part
+            // Very sorry for this, nadhi <3 
+            
+            */}
+            {typeof players.online === "number" && typeof players.max === "number" && (
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-xs text-white/70 font-semibold">
+                  {players.online} / {players.max}
+                </span>
+                {Array.isArray(players.list) && players.list.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {players.list.map(player => (
+                      <span
+                        key={player.uuid}
+                        className="bg-emerald-700/80 text-white text-xs px-2 py-1 rounded-full font-medium"
+                        title={player.uuid}
+                      >
+                        {player.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
