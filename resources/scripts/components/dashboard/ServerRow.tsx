@@ -48,6 +48,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   useEffect(() => {
     // Only fetch players if the server is running and has a Minecraft allocation
     if (!isSuspended && server.allocations.length > 0) {
+      console.log("Fetching players for server:", server)
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
         const ipToUse = allocation.ip_alias || allocation.ip;
