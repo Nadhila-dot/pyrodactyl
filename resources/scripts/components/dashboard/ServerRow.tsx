@@ -127,7 +127,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
             </p>
 
             {/* Player badges and count */}
-            {players && typeof players.online === "number" && typeof players.max === "number" && (
+            
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-xs text-white/70 font-semibold">
                   {players.online} / {players.max}
@@ -146,7 +146,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                   </div>
                 )}
               </div>
-            )}
+            
           </div>
         </div>
 
