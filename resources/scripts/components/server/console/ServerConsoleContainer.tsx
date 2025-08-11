@@ -19,6 +19,7 @@ import Features from '@feature/Features';
 import { StatusPill } from './StatusPill';
 
 import getPlugins from '@/api/server/plugins/getPlugins';
+import ServerPlayers from './ServerPlayers';
 
 export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
@@ -62,6 +63,7 @@ const ServerConsoleContainer = () => {
                     </h2>
                 )}
                 <ServerDetailsBlock />
+                <ServerPlayers />
                 <Console status={status} />
                 <div className={'grid grid-cols-1 md:grid-cols-3 gap-4'}>
                     <Spinner.Suspense>
