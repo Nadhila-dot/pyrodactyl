@@ -50,6 +50,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     if (!isSuspended && server.allocations.length > 0) {
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
+        // add debug line for now
+        console.log(allocation, "allocation")
         const ipToUse = allocation?.ip_alias || "nah nah";
         getPlayers(ipToUse, allocation.port)
           .then((data) => {
