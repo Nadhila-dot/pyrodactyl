@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
+import { IconLock, IconUser } from '@tabler/icons-react';
 
 import FriendlyCaptcha from '@/components/FriendlyCaptcha';
 import login from '@/api/auth/login';
@@ -150,7 +151,7 @@ function LoginContainer() {
                     }}
                 />
             )}*/}
-            
+
             {/* Flash message display */}
             {flashes && flashes.length > 0 && (
                 <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 w-full max-w-lg">
@@ -171,54 +172,68 @@ function LoginContainer() {
             >
                 {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
                     <form onSubmit={handleSubmit} className="w-full max-w-lg">
-                        <FlashMessageRender/>
+                        <FlashMessageRender />
                         <Card className="bg-black border border-zinc-800 shadow-lg rounded-xl px-10 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
                             <CardHeader>
                                 <CardTitle className="text-white text-2xl font-bold text-left">
                                     Login to {window.company.name}
                                 </CardTitle>
-                                <div className="text-zinc-400 mb-4">
+                                <div className="text-zinc-400 ">
                                     Enter your credentials to access your account
                                 </div>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-6">
-                                    <div>
-                                        <Label htmlFor="user" className="text-white font-medium">Username or Email</Label>
-                                        <Input
-                                            id="user"
-                                            name="user"
-                                            type="text"
-                                            value={values.user}
-                                            onChange={handleChange}
-                                            disabled={isSubmitting}
-                                            className="mt-2 bg-zinc-900 border border-zinc-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
-                                            autoComplete="username"
-                                        />
+                                    <div className="space-y-2">
+                                        <Label htmlFor="user" className={`text-base sm:text-lg text-gray-200`}>
+                                            Username or Email
+                                        </Label>
+                                        <div className="relative">
+                                            <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                            <Input
+                                                id="user"
+                                                name="user"
+                                                type="text"
+                                                placeholder="example@example.com"
+                                                value={values.user}
+                                                onChange={handleChange}
+                                                className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
+                                                disabled={isSubmitting}
+                                                autoComplete="username"
+                                            />
+                                        </div>
                                         {touched.user && errors.user && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.user}</div>
+                                            <p className="text-sm text-red-500">{errors.user}</p>
                                         )}
                                     </div>
-                                    <div className="relative">
-                                        <Label htmlFor="password" className="text-white font-medium">Password</Label>
-                                        <Input
-                                            id="password"
-                                            name="password"
-                                            type="password"
-                                            value={values.password}
-                                            onChange={handleChange}
-                                            disabled={isSubmitting}
-                                            className="mt-2 bg-zinc-900 border border-zinc-700 text-white focus:border-emerald-500 focus:ring-emerald-500"
-                                            autoComplete="current-password"
-                                        />
-                                        <Link
-                                            to="/auth/password"
-                                            className="text-xs text-zinc-400 tracking-wide no-underline hover:text-emerald-500 absolute top-0 right-0 mt-1"
-                                        >
-                                            Forgot Password?
-                                        </Link>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <Label htmlFor="password" className="text-base sm:text-lg text-gray-200">
+                                                Password
+                                            </Label>
+                                            <Link
+                                                to="/auth/password"
+                                                className="text-xs text-zinc-400 tracking-wide no-underline hover:text-emerald-500"
+                                            >
+                                                Forgot Password?
+                                            </Link>
+                                        </div>
+                                        <div className="relative">
+                                            <IconLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                            <Input
+                                                id="password"
+                                                name="password"
+                                                type="password"
+                                                placeholder="••••••••"
+                                                value={values.password}
+                                                onChange={handleChange}
+                                                className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
+                                                disabled={isSubmitting}
+                                                autoComplete="current-password"
+                                            />
+                                        </div>
                                         {touched.password && errors.password && (
-                                            <div className="text-red-500 text-xs mt-1">{errors.password}</div>
+                                            <p className="text-sm text-red-500">{errors.password}</p>
                                         )}
                                     </div>
                                     {isTurnstileEnabled && (
@@ -276,7 +291,7 @@ function LoginContainer() {
                                 >
                                     {isSubmitting ? 'Logging in...' : 'Login'}
                                 </Button>
-                                <span className='dark:text-white'>
+                                <span className=''>
                                     Powered by Contava
                                 </span>
                             </CardFooter>

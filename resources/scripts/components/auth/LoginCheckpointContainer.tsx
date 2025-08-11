@@ -28,7 +28,7 @@ function LoginCheckpointForm() {
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <Card className="p-8 border-zinc-800 bg-black shadow-xl rounded-xl">
+        <Card className="p-8 border-zinc-800 bg-black max-w-2xl shadow-xl rounded-xl">
             <CardContent>
                 <form className="w-full flex flex-col items-center" onSubmit={handleSubmit}>
                     <Link to='/'>
