@@ -33,7 +33,7 @@ export async function getServerStatus(serverIp: string, port: number = 25565): P
     const endpoint = `https://api.mcsrvstat.us/2/${serverIp}${port !== 25565 ? `:${port}` : ""}`;
     const response = await axios.get(endpoint, {
       headers: {
-        "User-Agent": "contava/1.0 (https://nadhi.dev) || Creepercloud.io"
+        "User-Agent": "contava/1.0"
       },
       validateStatus: () => true // Accept all status codes for custom handling
     });
