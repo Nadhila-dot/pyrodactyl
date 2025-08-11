@@ -51,7 +51,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
       console.log("Fetching players for server:", server)
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
-        const ipToUse = allocation.ip_alias || allocation.ip;
+        const ipToUse = server.sftpDetails.ip || "Contava-not-found-server-row"
         getPlayers(ipToUse, allocation.port)
           .then((data) => {
             if (data?.list && data.list.length > 0) setPlayers(data.list);
