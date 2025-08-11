@@ -8,7 +8,7 @@ import { bytesToString, ip } from "@/lib/formatters"
 import type { Server } from "@/api/server/getServer"
 import getServerResourceUsage, { type ServerStats } from "@/api/server/getServerResourceUsage"
 import { getPlayers } from "@/api/minecraft/getPlayers"
-import type { PlayersData } from "@/api/minecraft/getPlayers"; // <-- import the type
+//import type { PlayersData } from "@/api/minecraft/getPlayers"; // <-- import the type
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
@@ -20,7 +20,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended")
   const [stats, setStats] = useState<ServerStats | null>(null)
-  const [players, setPlayers] = useState<PlayersData | null>(null)
+  const [players, setPlayers] = useState<any | null>(null)
 
   const getStats = () =>
     getServerResourceUsage(server.uuid)
@@ -53,7 +53,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
         const ipToUse = allocation.ip_alias || allocation.ip;
         getPlayers(ipToUse, allocation.port)
           .then((data) => {
-            setPlayers(data); // <-- set the whole object, not just the list
+            console.log("Players object for server", server.name, data);
+            setPlayers(data);
           })
           .catch(() => setPlayers(null));
       }
@@ -127,7 +128,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
             </p>
 
             {/* Player badges and count */}
-            
+            {players && typeof players.online === "number" && typeof players.max === "number" && (
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-xs text-white/70 font-semibold">
                   {players.online} / {players.max}
@@ -146,7 +147,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                   </div>
                 )}
               </div>
-            
+            )}
           </div>
         </div>
 
