@@ -8,6 +8,7 @@ import { bytesToString, ip } from "@/lib/formatters"
 import type { Server } from "@/api/server/getServer"
 import getServerResourceUsage, { type ServerStats } from "@/api/server/getServerResourceUsage"
 import { getPlayers } from "@/api/minecraft/getPlayers"
+import { Badge } from "../ui/badge"
 //import type { PlayersData } from "@/api/minecraft/getPlayers"; // <-- import the type
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
@@ -130,9 +131,11 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
             {/* Player badges and count */}
             {players && typeof players.online === "number" && typeof players.max === "number" && (
               <div className="flex items-center gap-2 mt-2">
-                <span className="text-xs text-white/70 font-semibold">
-                  {players.online} / {players.max}
-                </span>
+                <Badge>
+                  <span className="text-xs text-white/70 font-semibold">
+                    Players on your server {players.online} / {players.max}
+                  </span>
+                </Badge>
                 {Array.isArray(players.list) && players.list.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {players.list.map(player => (
