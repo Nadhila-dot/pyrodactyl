@@ -8,6 +8,7 @@ import { bytesToString, ip } from "@/lib/formatters"
 import type { Server } from "@/api/server/getServer"
 import getServerResourceUsage, { type ServerStats } from "@/api/server/getServerResourceUsage"
 import { getPlayers } from "@/api/minecraft/getPlayers"
+import type { PlayersData } from "@/api/minecraft/getPlayers"; // <-- import the type
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
@@ -19,7 +20,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended")
   const [stats, setStats] = useState<ServerStats | null>(null)
-  const [players, setPlayers] = useState<PlayerInfo[]>([])
+  const [players, setPlayers] = useState<PlayersData | null>(null)
 
   const getStats = () =>
     getServerResourceUsage(server.uuid)
@@ -46,22 +47,18 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   }, [isSuspended])
 
   useEffect(() => {
-    // Only fetch players if the server is running and has a Minecraft allocation
     if (!isSuspended && server.allocations.length > 0) {
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
-        // add debug line for now
-        //console.log(allocation, "allocation")
-        const ipToUse = allocation?.alias || "nah nah";
+        const ipToUse = allocation.ip_alias || allocation.ip;
         getPlayers(ipToUse, allocation.port)
           .then((data) => {
-            if (data?.list && data.list.length > 0) setPlayers(data.list);
-            else setPlayers([]);
+            setPlayers(data); // <-- set the whole object, not just the list
           })
-          .catch(() => setPlayers([]));
+          .catch(() => setPlayers(null));
       }
     } else {
-      setPlayers([]);
+      setPlayers(null);
       console.warn("Skipping player fetch: server is suspended or has no default allocation.");
     }
   }, [isSuspended, server.allocations]);
@@ -129,12 +126,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 ))}
             </p>
 
-            {/* Player badges and count
-            // Typescript is going to crazy seeing this part
-            // Very sorry for this, nadhi <3 
-            
-            */}
-            {typeof players.online === "number" && typeof players.max === "number" && (
+            {/* Player badges and count */}
+            {players && typeof players.online === "number" && typeof players.max === "number" && (
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-xs text-white/70 font-semibold">
                   {players.online} / {players.max}
