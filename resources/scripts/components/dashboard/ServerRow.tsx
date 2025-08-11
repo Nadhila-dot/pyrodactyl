@@ -51,8 +51,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
       const allocation = server.allocations.find(a => a.isDefault);
       if (allocation) {
         // add debug line for now
-        console.log(allocation, "allocation")
-        const ipToUse = allocation?.ip_alias || "nah nah";
+        //console.log(allocation, "allocation")
+        const ipToUse = allocation?.alias || "nah nah";
         getPlayers(ipToUse, allocation.port)
           .then((data) => {
             if (data?.list && data.list.length > 0) setPlayers(data.list);
