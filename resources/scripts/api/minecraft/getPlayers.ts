@@ -1,15 +1,17 @@
-interface PlayerInfo {
+import axios from "axios";
+
+export interface PlayerInfo {
   name: string;
   uuid: string;
 }
 
-interface PlayersData {
+export interface PlayersData {
   online: number;
   max: number;
   list?: PlayerInfo[];
 }
 
-interface ServerStatusResponse {
+export interface ServerStatusResponse {
   hostname: string;
   players: PlayersData;
   info?: string[];
@@ -26,46 +28,44 @@ interface ServerStatusResponse {
  */
 export async function getServerStatus(serverIp: string, port: number = 25565): Promise<ServerStatusResponse> {
   try {
-    // Make sure we have a proper IP/domain
-    if (!serverIp) {
-      throw new Error('Server IP or domain is required');
-    }
-    
-    const endpoint = `https://api.mcsrvstat.us/2/${serverIp}${port !== 25565 ? `:${port}` : ''}`;
-    
-    const response = await fetch(endpoint, {
+    if (!serverIp) throw new Error("Server IP or domain is required");
+
+    const endpoint = `https://api.mcsrvstat.us/2/${serverIp}${port !== 25565 ? `:${port}` : ""}`;
+    const response = await axios.get(endpoint, {
       headers: {
-        'User-Agent': 'Contava/Nadhi.dev (If we are hindering usage, please contact us nadhilaplayz@gmail.com)'
-      }
+        "User-Agent": "contava/1.0 (https://nadhi.dev) || Creepercloud.io"
+      },
+      validateStatus: () => true // Accept all status codes for custom handling
     });
 
-    if (!response.ok) {
-      if (response.status === 403) {
-        throw new Error('Access forbidden. A proper User-Agent header is required.');
-      }
+    if (response.status === 403) {
+      throw new Error("Access forbidden. A proper User-Agent header is required.");
+    }
+    if (response.status !== 200) {
       throw new Error(`API request failed with status ${response.status}`);
     }
 
-    const data = await response.json();
-    
-    // Format the response to match our expected output
+    const data = response.data;
+    // Debug log for raw API response
+    console.log("Raw mcsrvstat.us response:", data);
+
     return {
       hostname: data.hostname || data.ip || serverIp,
       players: {
-        online: data.players?.online || 0,
-        max: data.players?.max || 0,
-        list: data.players?.list || []
+        online: data.players?.online ?? 0,
+        max: data.players?.max ?? 0,
+        list: Array.isArray(data.players?.list) ? data.players.list : []
       },
-      info: data.motd?.clean || data.motd?.html || [],
+      info: Array.isArray(data.motd?.clean) ? data.motd.clean : [],
       online: data.online === true
     };
-  } catch (error) {
-    console.error('Error fetching Minecraft server status:', error);
+  } catch (error: any) {
+    console.error("Error fetching Minecraft server status:", error);
     return {
       hostname: serverIp,
-      players: { online: 0, max: 0 },
+      players: { online: 0, max: 0, list: [] },
       online: false,
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+      error: error?.message || "Unknown error occurred"
     };
   }
 }
@@ -79,11 +79,8 @@ export async function getServerStatus(serverIp: string, port: number = 25565): P
  */
 export async function getPlayers(serverIp: string, port: number = 25565): Promise<PlayersData | null> {
   const serverStatus = await getServerStatus(serverIp, port);
-  
-  if (!serverStatus.online) {
-    return null;
-  }
-  
+  console.log("getPlayers result:", serverStatus.players);
+  if (!serverStatus.online) return null;
   return serverStatus.players;
 }
 
