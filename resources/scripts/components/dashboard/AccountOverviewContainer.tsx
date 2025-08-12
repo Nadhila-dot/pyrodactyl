@@ -6,7 +6,7 @@ import UpdateEmailAddressForm from '@/components/dashboard/forms/UpdateEmailAddr
 import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm';
 import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-import ThemeSettings from '@/components/dashboard/forms/ThemeSettings';
+import ThemeSettings from '@/components/dashboard/forms/BackGround';
 
 import Code from '../elements/Code';
 import FontSettings from './forms/FontSettings';
@@ -50,8 +50,8 @@ const AccountOverviewContainer = () => {
                             </div>
                         </ContentBox>
                     </div>
-                    
-                    
+
+
                 </div>
             </div>
         </PageContentBlock>

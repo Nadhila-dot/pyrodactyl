@@ -9,6 +9,13 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Button } from '@/components/elements/button/index';
 import { toast } from 'sonner';
 
+
+/**
+ * Background Settings Component
+ * Allows users to set a custom background image for the main page.
+ * 
+ */
+
 import FontSettings from './FontSettings';
 
 interface Values {

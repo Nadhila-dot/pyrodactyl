@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { Progress } from "@/components/ui/progress";
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
@@ -39,8 +40,8 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const connected = ServerContext.useStoreState((state) => state.socket.connected);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
-    
-    
+
+
 
     const textLimits = useMemo(
         () => ({
@@ -83,6 +84,18 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
         });
     });
 
+    // Limits for progress
+    const cpuLimit = limits?.cpu ?? 100;
+    const memoryLimit = limits?.memory ? mbToBytes(limits.memory) : 1;
+    const diskLimit = limits?.disk ? mbToBytes(limits.disk) : 1;
+
+    // Helper for progress color
+    const getProgressColor = (percent: number) => {
+        if (percent >= 0.9) return "bg-red-500";
+        if (percent >= 0.8) return "bg-yellow-500";
+        return "bg-emerald-600";
+    };
+
     return (
         <div className={clsx('flex md:flex-row gap-4 flex-col', className)}>
             <div
@@ -113,7 +126,17 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     {status === 'offline' ? (
                         <span className={'text-zinc-400'}>Offline</span>
                     ) : (
-                        <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
+                        <>
+                            <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
+                            <div className="mt-2">
+                                <Progress
+                                    value={Math.min((stats.cpu / cpuLimit) * 100, 100)}
+                                    className="h-2 bg-zinc-900"
+                                    indicatorClassName={getProgressColor(stats.cpu / cpuLimit)}
+                                />
+                                <div className="text-xs text-white mt-1 text-right">{cpuLimit}% limit</div>
+                            </div>
+                        </>
                     )}
                 </StatBlock>
             </div>
@@ -131,7 +154,17 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     {status === 'offline' ? (
                         <span className={'text-zinc-400'}>Offline</span>
                     ) : (
-                        <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                        <>
+                            <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                            <div className="mt-2">
+                                <Progress
+                                    value={Math.min((stats.memory / memoryLimit) * 100, 100)}
+                                    className="h-2 bg-zinc-900"
+                                    indicatorClassName={getProgressColor(stats.memory / memoryLimit)}
+                                />
+                                <div className="text-xs text-white mt-1 text-right">{bytesToString(memoryLimit)} limit</div>
+                            </div>
+                        </>
                     )}
                 </StatBlock>
             </div>
@@ -147,6 +180,14 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
             >
                 <StatBlock title={'Storage'}>
                     <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
+                    <div className="mt-2">
+                        <Progress
+                            value={Math.min((stats.disk / diskLimit) * 100, 100)}
+                            className="h-2 bg-zinc-900"
+                            indicatorClassName={getProgressColor(stats.disk / diskLimit)}
+                        />
+                        <div className="text-xs text-white mt-1 text-right">{bytesToString(diskLimit)} limit</div>
+                    </div>
                 </StatBlock>
             </div>
         </div>

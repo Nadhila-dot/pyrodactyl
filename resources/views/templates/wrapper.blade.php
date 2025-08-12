@@ -5,6 +5,7 @@
 | |_| |/ _ \ | |/ _ \  |  \| |/ _` |/ _` | '_ \| |
 |  _  |  __/ | | (_) | | |\  | (_| | (_| | | | | |
 |_| |_|\___|_|_|\___/  |_| \_|\__,_|\__,_|_| |_|_|
+Beating Nebula, stellar and Arix
 Made with love! (Main repo PYRO)
 -->
 <html nadhi.dev-mnger lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
@@ -17,6 +18,8 @@ Made with love! (Main repo PYRO)
             <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <meta name="robots" content="noindex">
+
+            <meta name="scan-valid" content="beta-00xj" />
 
            
             <meta name="apple-mobile-web-app-title" content="Pterodactyl-Contava" />

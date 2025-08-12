@@ -6,7 +6,7 @@ import UpdateEmailAddressForm from '@/components/dashboard/forms/UpdateEmailAddr
 import UpdatePasswordForm from '@/components/dashboard/forms/UpdatePasswordForm';
 import ContentBox from '@/components/elements/ContentBox';
 import PageContentBlock from '@/components/elements/PageContentBlock';
-import ThemeSettings from '@/components/dashboard/forms/ThemeSettings';
+import ThemeSettings from '@/components/dashboard/forms/BackGround';
 
 import Code from '../elements/Code';
 import FontSettings from './forms/FontSettings';
@@ -17,21 +17,21 @@ const ThemeContainer = () => {
     return (
         <PageContentBlock title={'Theme Settings'}>
             <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem] mb-8'>Theme Settings</h1>
-            
+
 
             <div className='flex flex-col w-full h-full gap-4'>
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1 flex flex-col gap-4">
-                        
+
                         <ThemeSettings />
-                        <FontSettings/>
-                        
+                        <FontSettings />
+
                     </div>
                     <div className="flex-1 flex flex-col gap-4">
                         {/* Opposite side  */}
-                         
+
                     </div>
-                    
+
                 </div>
             </div>
         </PageContentBlock>

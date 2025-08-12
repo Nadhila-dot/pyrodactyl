@@ -3,6 +3,7 @@ import ScreenBlock from '@/components/elements/ScreenBlock';
 import { ServerContext } from '@/state/server';
 
 import Spinner from '../elements/Spinner';
+import ServerInstallingContainer from './ServerInstallingContainer';
 
 const ConflictStateRenderer = () => {
     const status = ServerContext.useStoreState((state) => state.server.data?.status || null);
@@ -12,19 +13,9 @@ const ConflictStateRenderer = () => {
     );
 
     return status === 'installing' || status === 'install_failed' || status === 'reinstall_failed' ? (
-        <div className={'flex flex-col items-center justify-center h-full'}>
-            <img
-            src="https://media.tenor.com/d2j7YdyhtmsAAAAi/shikanoko-dance-shikanoko-meme.gif"
-            alt="Installing"
-            className="rounded-lg w-24 h-24"
-            />
-            <div className='flex flex-col mt-4 text-center'>
-            <label className='text-neutral-100 text-lg font-bold'>Server's getting ready!</label>
-            <label className='text-neutral-500 text-md font-semibold mt-1'>
-                Your server should be ready soon, until then please wait patiently. You wouldn't rush a bride would you?
-            </label>
-            </div>
-        </div>
+       
+
+        <ServerInstallingContainer/>
     ) : status === 'suspended' ? (
         <ScreenBlock title={'Server Suspended'} message={'This server is suspended and cannot be accessed.'} />
     ) : isNodeUnderMaintenance ? (

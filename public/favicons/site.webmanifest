@@ -1,6 +1,6 @@
 {
-  "name": "Pyrodactyl",
-  "short_name": "Pyrodactyl",
+  "name": "Contava Alpha (0.7)",
+  "short_name": "Contava",
   "icons": [
     {
       "src": "/favicons/web-app-manifest-192x192.png",
@@ -17,5 +17,8 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "description": "Contava is a modern, open-source platform for managing and deploying applications with ease. Built with a focus on simplicity and performance, it provides a seamless experience for developers and users alike."
 }

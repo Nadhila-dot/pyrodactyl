@@ -66,6 +66,7 @@ const FontSettings = () => {
                         <FormikFieldWrapper
                             label='Google Font Family'
                             name='fontFamily'
+       
                             description={
                                 <>
                                     Enter any Google Fonts family name (e.g. <b>Roboto</b>, <b>Doto</b>, <b>Poppins</b>).<br />
