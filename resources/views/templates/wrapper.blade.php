@@ -49,7 +49,7 @@ Made with love! (Main repo PYRO)
        
         <style>
             html, body, * {
-                font-family: var(--main-font, 'Space Grotesk', sans-serif) !important;
+                font-family: var(--main-font, sans-serif) !important;
             }
         </style>
         

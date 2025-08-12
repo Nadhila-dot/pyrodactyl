@@ -17,7 +17,7 @@ const ServerInstallingContainer: React.FC = () => (
             <img
                 src="https://media.tenor.com/d2j7YdyhtmsAAAAi/shikanoko-dance-shikanoko-meme.gif"
                 alt="Installing"
-                className="rounded-lg w-24 h-24"
+                className="rounded-lg w-48 h-48"
             />
             <div className="flex flex-col mt-4 text-center">
                 <label className="text-neutral-100 text-lg font-bold">Server's getting ready!</label>

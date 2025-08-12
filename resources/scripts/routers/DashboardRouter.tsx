@@ -230,33 +230,19 @@ const DashboardRouter = () => {
 
             <MainSidebar
                 ref={sidebarRef}
-                className={`fixed inset-y-0 left-0 z-9999 w-72 xl:w-80 bg-black text-white ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} lg:translate-x-0 lg:relative lg:flex lg:shrink-0 border-r border-gray-900`}
+                className={`fixed inset-y-0 left-0 z-9999 w-60 xl:w-64 bg-black text-white ${isSidebarBetween ? 'transition-transform duration-300 ease-in-out' : ''} lg:translate-x-0 lg:relative lg:flex lg:shrink-0 border-r border-gray-900`}
                 style={{
                     transform: `translate(${sidebarPosition}px)`,
                 }}
             >
-                {/* Active Route Indicator */}
-                {/*
-                <div
-                    className='absolute bg-green-500 w-[2px] h-10 left-0 rounded-full pointer-events-none'
-                    style={{
-                        top,
-                        height,
-                        opacity: top === '0' ? 0 : 1,
-                        transition:
-                            'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                    }}
-                />
-                */}
-
                 {/* Sidebar Content */}
-                <div className="flex flex-col h-full p-4 xl:p-5">
+                <div className="flex flex-col h-full p-3 xl:p-4">
                     {/* Header */}
-                    <div className='flex items-center justify-between mb-4 xl:mb-5'>
+                    <div className='flex items-center justify-between mb-3 xl:mb-4'>
                         <NavLink to={'/'} className='flex items-center w-full justify-start'>
                             <div className="scale-100 xl:scale-105 transition-transform duration-200 ml-1">
                                 <Logo />
-                                <Separator className="mt-3 mr-2 max-w-1/3 opacity-25" />
+                                <Separator className="mt-2 mr-2 max-w-1/3 opacity-25" />
                             </div>
                         </NavLink>
                     </div>
@@ -274,14 +260,14 @@ const DashboardRouter = () => {
 
 
                     {/* Navigation */}
-                    <nav className="flex-1 pr-2">
-                        <ul className='space-y-1.5 xl:space-y-2 pr-3' onClick={toggleSidebar}>
+                    <nav className="flex-1  ">
+                        <ul className='space-y-1.5  xl:space-y-2 pr-3' onClick={toggleSidebar}>
                             <li>
                                 <NavLink
                                     to={'/'}
                                     end
                                     className={({ isActive }) =>
-                                        `flex items-center space-x-3.5 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
+                                        `flex items-center space-x-4 xl:space-x-4 px-3.5 xl:px-4 py-3 xl:py-3.5 rounded-lg transition-all duration-200 ${isActive
                                             ? 'bg-zinc-900 text-white border-l-2 xl:border-l-[3px] border-green-500'
                                             : 'text-gray-400 hover:text-white hover:bg-zinc-900/50'
                                         }`
@@ -423,11 +409,14 @@ const DashboardRouter = () => {
             </MainSidebar>
 
             <Suspense fallback={null}>
-                <MainWrapper onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+                <MainWrapper
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white pl-4 lg:pl-16'
+                >
                     <main
-                        nadhi_dev='https://nadhi.dev'
-
-                        className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white'
+                        className='relative w-full h-full'
                     >
                         <Routes>
                             <Route path='' element={<DashboardContainer />} />
