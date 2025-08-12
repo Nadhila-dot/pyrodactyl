@@ -354,7 +354,7 @@ const DashboardRouter = () => {
                                     ref={NavigationHome}
                                 >
                                     <IconPalette size={18} className="xl:w-[19px] xl:h-[19px]" />
-                                    <span className="font-medium text-sm xl:text-sm">Coustmize</span>
+                                    <span className="font-medium text-sm xl:text-sm">"Customize"</span>
                                 </NavLink>
                             </li>
                             {rootAdmin && (
