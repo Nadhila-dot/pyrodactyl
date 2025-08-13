@@ -75,7 +75,7 @@ const Dialog = ({
                     >
                         {/* Subtle blurred background */}
                         <div
-                            className="fixed inset-0 z-9997 bg-transparent backdrop-blur-2xl"
+                            className="fixed inset-0 z-9997 bg-black/30 backdrop-blur-sm"
                         />
                         <div className={'fixed inset-0 overflow-y-auto z-9998'}>
                             <div
