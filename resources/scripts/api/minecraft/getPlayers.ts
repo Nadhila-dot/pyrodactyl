@@ -20,7 +20,7 @@ export interface ServerStatusResponse {
 }
 
 /**
- * Fetches player and server information from a Minecraft server using mcsrvstat.us API
+ * Fetches player and server information from a Minecraft server using mcstatus.io API
  * 
  * @param serverIp - The IP address or domain of the Minecraft server
  * @param port - Optional port number (default: 25565)
@@ -30,31 +30,33 @@ export async function getServerStatus(serverIp: string, port: number = 25565): P
   try {
     if (!serverIp) throw new Error("Server IP or domain is required");
 
-    const endpoint = `https://api.mcsrvstat.us/2/${serverIp}${port !== 25565 ? `:${port}` : ""}`;
+    const endpoint = `https://api.mcstatus.io/v2/status/java/${serverIp}${port !== 25565 ? `:${port}` : ""}`;
     const response = await axios.get(endpoint, {
       headers: {
-        "User-Agent": "contava/1.0"
+        "User-Agent": "pyrodactyl/1.0"
       },
       validateStatus: () => true // Accept all status codes for custom handling
     });
 
-    if (response.status === 403) {
-      throw new Error("Access forbidden. A proper User-Agent header is required.");
-    }
     if (response.status !== 200) {
       throw new Error(`API request failed with status ${response.status}`);
     }
 
     const data = response.data;
     // Debug log for raw API response
-    console.log("Raw mcsrvstat.us response:", data);
+    console.log("Raw mcstatus.io response:", data);
 
     return {
-      hostname: data.hostname || data.ip || serverIp,
+      hostname: data.host || serverIp,
       players: {
         online: data.players?.online ?? 0,
         max: data.players?.max ?? 0,
-        list: Array.isArray(data.players?.list) ? data.players.list : []
+        list: Array.isArray(data.players?.list)
+          ? data.players.list.map((player: any) => ({
+              name: player.name_clean || player.name,
+              uuid: player.uuid
+            }))
+          : []
       },
       info: Array.isArray(data.motd?.clean) ? data.motd.clean : [],
       online: data.online === true
