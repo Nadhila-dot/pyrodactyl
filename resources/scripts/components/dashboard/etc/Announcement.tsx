@@ -41,7 +41,7 @@ export const Announcement = () => {
         return (
             <div className="flex items-center border-l-8 border-red-500 bg-red-500/25 text-zinc-50 rounded-md shadow-sm px-4 py-3">
                 <HugeIconsAlert fill="currentColor" className="w-6 h-6 text-red-400 mr-2" />
-                <div>Failed to load announcement. Please try again later.</div>
+                <div>{error}</div>
             </div>
         );
     }
@@ -81,7 +81,7 @@ export const Announcement = () => {
     return (
         <div
             className={clsx(
-                'flex items-start bg-black/80 border-l-8 text-zinc-50 rounded-md shadow-sm px-4 py-3 mb-4 font-[Poppins]',
+                'flex items-start border-l-8 text-zinc-50 rounded-md shadow-sm px-4 py-3 mb-4 font-[Poppins]',
                 border
             )}
         >
