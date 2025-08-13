@@ -46,5 +46,11 @@ Route::post('/logout', [Auth\LoginController::class, 'logout'])
   ->middleware('auth')
   ->name('auth.logout');
 
+
+Route::get('/logout', [Auth\LoginController::class, 'logout'])
+  ->withoutMiddleware('guest')
+  ->middleware('auth')
+  ->name('auth.logout.get');
+
 // Catch any other combinations of routes and pass them off to the React component.
 Route::fallback([Auth\LoginController::class, 'index']);

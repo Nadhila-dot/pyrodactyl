@@ -18,6 +18,7 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 
 import styles from './style.module.css';
 import Spinner from '@/components/elements/Spinner';
+import ConsoleErrorModal from './ConsoleErrorModals';
 
 const theme = {
     background: '#131313',
@@ -56,6 +57,7 @@ interface ConsoleProps {
 
 const Console = ({ status: _status }: ConsoleProps) => {
     const [companyName, setCompanyName] = useState('pterodactyl');
+    const [error, setError] = useState<string | null>(null); // State to track errors
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(() => new Terminal({ ...terminalProps, rows: 30 }), []);
     const fitAddon = new FitAddon();
@@ -92,10 +94,23 @@ const Console = ({ status: _status }: ConsoleProps) => {
         }
     };
 
-    const handleDaemonErrorOutput = (line: string) =>
+    const handleDaemonErrorOutput = (line: string) => {
         terminal.writeln(
             TERMINAL_PRELUDE + '\u001b[1m\u001b[41m' + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m',
         );
+
+        // Check for specific error and set it in state
+        if (line.includes('another power action is currently being processed')) {
+            setError(
+                'Your server is still starting! Don\'t try to start it again!'
+            );
+        }
+    };
+
+    // Close the modal
+    const handleCloseErrorModal = () => {
+        setError(null);
+    };
 
     const handlePowerChangeEvent = (state: string) =>
         terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
@@ -162,7 +177,7 @@ const Console = ({ status: _status }: ConsoleProps) => {
             [SocketEvent.TRANSFER_LOGS]: handleConsoleOutput,
             [SocketEvent.TRANSFER_STATUS]: handleTransferStatus,
             [SocketEvent.DAEMON_MESSAGE]: (line) => handleConsoleOutput(line, true),
-            [SocketEvent.DAEMON_ERROR]: handleDaemonErrorOutput,
+            [SocketEvent.DAEMON_ERROR]: handleDaemonErrorOutput, // Updated to handle errors
         };
 
         if (connected && instance) {
@@ -196,17 +211,8 @@ const Console = ({ status: _status }: ConsoleProps) => {
     }, [connected, instance]);
 
     return (
-        <div
-            className='transform-gpu skeleton-anim-2'
-            style={{
-                display: 'flex',
-                width: '100%',
-                height: '100%',
-                animationDelay: `250ms`,
-                animationTimingFunction:
-                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-            }}
-        >
+        <div className="transform-gpu skeleton-anim-2">
+            <ConsoleErrorModal error={error} onClose={handleCloseErrorModal} />
             <div className={clsx(styles.terminal, 'relative')}>
                 {/* Only show spinner overlay if status is 'fetching' */}
                 <SpinnerOverlay visible={serverStatus === 'fetching'} size={'large'} />

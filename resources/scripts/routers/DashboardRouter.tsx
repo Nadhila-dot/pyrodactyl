@@ -24,7 +24,7 @@ import HugeIconsHome from '@/components/elements/hugeicons/Home';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 import { Player } from '@lordicon/react';
-import { IconBrandUnsplash, IconBrush, IconKey, IconLinkPlus, IconPalette, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
+import { IconBrandUnsplash, IconBrush, IconKey, IconLinkPlus, IconLogout2, IconPalette, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
 
 import http from '@/api/http';
 import Footer from '@/components/Footer/footer';
@@ -360,9 +360,9 @@ const DashboardRouter = () => {
                                     </NavLink>
                                 </li>
                             )}
+                           
                         </ul>
                     </nav>
-
 
                     {/* User Profile */}
                     <div className="mt-auto pt-4 xl:pt-5 border-t border-gray-900">
@@ -370,7 +370,8 @@ const DashboardRouter = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
-                                    className="w-full h-auto p-3 xl:p-3.5 rounded-lg hover:bg-gray-800/70 transition-colors duration-200 justify-start gap-3"
+                                    className="w-full h-auto p-3 xl:p-3.5 rounded-lg hover:bg-black/80 transition-colors duration-200 justify-start gap-3 z-[99999]"
+                                    style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
                                 >
                                     <div className="w-8 h-8 xl:w-9 xl:h-9 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
                                         <span className="text-black font-semibold text-sm">
@@ -388,7 +389,7 @@ const DashboardRouter = () => {
                                     <div className="w-2 h-2 xl:w-2 xl:h-2 bg-green-500 rounded-full flex-shrink-0"></div>
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] bg-gray-800 border-gray-700 text-gray-200">
+                            <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)] bg-black/90 border-gray-700 text-gray-200 z-[99999]">
                                 {rootAdmin && (
                                     <DropdownMenuItem className="focus:bg-gray-700 focus:text-white cursor-pointer">
                                         <IconUserShield className="mr-2 h-4 w-4" />

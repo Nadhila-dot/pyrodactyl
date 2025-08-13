@@ -18,8 +18,9 @@ import { store } from '@/state';
 import { ServerContext } from '@/state/server';
 import { SiteSettings } from '@/state/settings';
 
-import PyrodactylProvider from './PyrodactylProvider';
+
 import Footer from './Footer/footer';
+import NadhiDevProvider from './Nadhi.dev';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
@@ -55,6 +56,10 @@ const App = () => {
         });
     }
 
+    // Font Reloader
+    // If you remove this fonts won't reload and update.
+    // Prob very slow, but it works.
+
     useEffect(() => {
     const fontFamily = localStorage.getItem('FONT_MAIN_PAGE');
     if (fontFamily) {
@@ -67,6 +72,7 @@ const App = () => {
         link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}&display=swap`;
         document.head.appendChild(link);
         // Apply font globally via CSS variable
+        // this variable is in wrapper.blade.php
         document.documentElement.style.setProperty('--main-font', `'${fontFamily.replace(/\+/g, ' ')}', sans-serif`);
     }
 }, []);
@@ -79,7 +85,7 @@ const App = () => {
         <>
             <GlobalStylesheet />
             <StoreProvider store={store}>
-                <PyrodactylProvider>
+                <NadhiDevProvider>
                     <div
                         data-pyro-routerwrap=''
                         className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
@@ -133,8 +139,8 @@ const App = () => {
                         </BrowserRouter>
                         
                     </div>
-                    
-                </PyrodactylProvider>
+
+                </NadhiDevProvider>
             </StoreProvider>
         </>
     );
