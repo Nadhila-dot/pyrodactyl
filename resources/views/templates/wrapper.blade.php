@@ -7,6 +7,7 @@
 |_| |_|\___|_|_|\___/  |_| \_|\__,_|\__,_|_| |_|_|
 Beating Nebula, stellar and Arix
 Made with love! (Main repo PYRO)
+cache: beta-1
 -->
 <html nadhi.dev-mnger lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
