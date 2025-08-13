@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { bytesToString, ip } from "@/lib/formatters";
 import type { Server } from "@/api/server/getServer";
@@ -14,20 +14,17 @@ import { useCachedValue } from "@/cache/Value";
 const isAlarmState = (current: number, limit: number): boolean =>
   limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
 
-type Timer = ReturnType<typeof setInterval>;
-
 const ServerRow = ({ server, className }: { server: Server; className?: string }) => {
-  const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended");
 
-  // Cache stats data
+  // Cache stats data with a 45-second refresh interval
   const { data: stats, loading: statsLoading } = useCachedValue({
     key: `server-stats-${server.uuid}`,
     fetcher: () => getServerResourceUsage(server.uuid),
-    ttl: 30000, // Cache for 30 seconds
+    ttl: 65000, // Cache for 45 seconds
   });
 
-  // Cache players data
+  // Cache players data with a 45-second refresh interval
   const { data: players, loading: playersLoading } = useCachedValue({
     key: `server-players-${server.uuid}`,
     fetcher: async () => {
@@ -36,7 +33,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
       const ipToUse = allocation.alias || allocation.ip;
       return getPlayers(ipToUse, allocation.port);
     },
-    ttl: 60000, // Cache for 60 seconds
+    ttl: 45000, // Cache for 45 seconds
   });
 
   useEffect(() => {
