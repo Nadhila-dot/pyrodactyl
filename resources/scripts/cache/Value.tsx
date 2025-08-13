@@ -9,8 +9,20 @@ interface CacheOptions {
 }
 
 export const useCachedValue = ({ key, fetcher, ttl = 60000 }: CacheOptions) => {
-    const [data, setData] = useState<any>(cache[key]?.value || null);
-    const [loading, setLoading] = useState(!cache[key]);
+    const [data, setData] = useState<any>(() => {
+        // Check localStorage for cached data
+        const stored = localStorage.getItem(key);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Date.now() - parsed.timestamp < ttl) {
+                cache[key] = parsed; // Sync with in-memory cache
+                return parsed.value;
+            }
+        }
+        return cache[key]?.value || null;
+    });
+
+    const [loading, setLoading] = useState(!data);
 
     useEffect(() => {
         let isMounted = true;
@@ -20,13 +32,15 @@ export const useCachedValue = ({ key, fetcher, ttl = 60000 }: CacheOptions) => {
                 // Use cached data if it's still valid
                 setData(cache[key].value);
                 setLoading(false);
-            } else if (!cache[key] || Date.now() - cache[key].timestamp >= ttl) {
+            } else {
                 // Fetch new data if cache is expired or doesn't exist
                 setLoading(true);
                 try {
                     const result = await fetcher();
                     if (isMounted) {
-                        cache[key] = { value: result, timestamp: Date.now() };
+                        const cachedData = { value: result, timestamp: Date.now() };
+                        cache[key] = cachedData;
+                        localStorage.setItem(key, JSON.stringify(cachedData)); // Save to localStorage
                         setData(result);
                     }
                 } catch (error) {
