@@ -34,13 +34,13 @@ const ServerPlayers = () => {
             </Badge>
             {Array.isArray(players.list) && players.list.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
-                    {players.list.map(playerName => (
+                    {players.list.map(player => (
                         <span
-                            key={playerName} // Use the player name directly as the key
+                            key={player.uuid} // Use the player's UUID as the key
                             className="bg-emerald-700/80 text-white text-xs px-2 py-1 rounded-full font-medium"
-                            title={playerName} // Use the player name for the title
+                            title={player.uuid} // Use the player's UUID for the title
                         >
-                            {playerName} {/* Display the player name */}
+                            {player.name} {/* Display the player's name */}
                         </span>
                     ))}
                 </div>
