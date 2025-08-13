@@ -1,35 +1,30 @@
-import http from '@/api/http';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import CacheWrapper from '@/cache';
 
-const Logo = () => {
-    const [logoUrl, setLogoUrl] = useState('/images/default-logo.png');
-    const [companyName, setCompanyName] = useState('Panel');
+const fetchLogoData = async () => {
+    const res = await fetch('/nadhi/logo');
+    const data = await res.json();
+    return {
+        logoUrl: data.logo || '/images/default-logo.png',
+        companyName: window.company?.name || 'Panel',
+    };
+};
 
-    useEffect(() => {
-        http.get('/nadhi/logo')
-            .then(res => {
-                if (res.data.logo) setLogoUrl(res.data.logo);
-            })
-            .catch(() => {
-                setLogoUrl('/images/default-logo.png');
-            });
-
-        // Get company name from global window object
-        if (window.company && window.company.name) {
-            setCompanyName(window.company.name);
-        }
-    }, []);
-
+const PyroLogo = () => {
     return (
-        <div className="flex items-center space-x-3">
-            <img
-                src={logoUrl}
-                alt={`${companyName} logo`}
-                className="h-10 w-auto"
-            />
-            <span className="text-white text-xl font-bold">{companyName}</span>
-        </div>
+        <CacheWrapper cacheKey="pyroLogo" fetchData={fetchLogoData} refreshInterval={60000}>
+            {(data) => (
+                <div className="flex items-center space-x-3">
+                    <img
+                        src={data?.logoUrl || '/images/default-logo.png'} // Use cached or fresh logo URL
+                        alt={`${data?.companyName || 'Panel'} logo`}
+                        className="h-10 w-auto"
+                    />
+                    <span className="text-white text-xl font-bold">{data?.companyName || 'Panel'}</span>
+                </div>
+            )}
+        </CacheWrapper>
     );
 };
 
-export default Logo;
+export default PyroLogo;

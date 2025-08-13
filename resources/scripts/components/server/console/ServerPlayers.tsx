@@ -1,28 +1,26 @@
-import { useEffect, useState } from "react";
-import { getPlayers } from "@/api/minecraft/getPlayers";
 import { Badge } from "@/components/ui/badge";
 import { IconUser } from "@tabler/icons-react";
+import { useCachedValue } from "@/cache/Value";
 import type { PlayersData } from "@/api/minecraft/getPlayers";
+import { getPlayers } from "@/api/minecraft/getPlayers";
 import { ServerContext } from "@/state/server";
 
 const ServerPlayers = () => {
     const allocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
-    const [players, setPlayers] = useState<PlayersData | null>(null);
 
-    useEffect(() => {
-        const allocation = allocations.find(a => a.isDefault);
-        if (allocation) {
+    // Cache players data
+    const { data: players, loading } = useCachedValue({
+        key: "server-players",
+        fetcher: async () => {
+            const allocation = allocations.find((a) => a.isDefault);
+            if (!allocation) return null;
             const ipToUse = allocation.alias || allocation.ip;
-            getPlayers(ipToUse, allocation.port)
-                .then((data) => {
-                    console.log("Players object for console", ipToUse, allocation.port, data);
-                    setPlayers(data);
-                })
-                .catch(() => setPlayers(null));
-        }
-    }, [allocations]);
+            return getPlayers(ipToUse, allocation.port);
+        },
+        ttl: 60000, // Cache for 60 seconds
+    });
 
-    if (!players || typeof players.online !== "number" || typeof players.max !== "number") return null;
+    if (loading || !players || typeof players.online !== "number" || typeof players.max !== "number") return null;
 
     return (
         <div className="mt-2">
@@ -34,7 +32,7 @@ const ServerPlayers = () => {
             </Badge>
             {Array.isArray(players.list) && players.list.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
-                    {players.list.map(player => (
+                    {players.list.map((player) => (
                         <span
                             key={player.uuid} // Use the player's UUID as the key
                             className="bg-emerald-700/80 text-white text-xs px-2 py-1 rounded-full font-medium"
