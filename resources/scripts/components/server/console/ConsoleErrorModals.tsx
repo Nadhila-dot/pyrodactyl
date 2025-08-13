@@ -1,5 +1,6 @@
 import React from 'react';
 import Dialog from '@/components/elements/dialog/Dialog';
+import Button from '@/components/elements/button/Button';
 
 interface ConsoleErrorModalProps {
     error: string | null;
@@ -12,18 +13,15 @@ const ConsoleErrorModal: React.FC<ConsoleErrorModalProps> = ({ error, onClose })
     return (
         <Dialog
             open={!!error}
-            title="Error"
-            description="An error occurred while processing your request."
+            title="Attention!"
+            // description="An error occurred while processing your request."
             onClose={onClose}
         >
-            <p className="mt-2 text-gray-300">{error}</p>
+            <p className="mt-2 text-2xl text-gray-300">{error}</p>
             <div className="mt-4 flex justify-end">
-                <button
-                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                    onClick={onClose}
-                >
-                    Close
-                </button>
+            <Button onClick={onClose}>
+                Close
+            </Button>
             </div>
         </Dialog>
     );
