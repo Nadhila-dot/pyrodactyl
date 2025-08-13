@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# nigger root
+# root yuh
 if [ "$EUID" -ne 0 ]; then
   echo "Can't update the panel without root privileges!!!"
   exit 1
