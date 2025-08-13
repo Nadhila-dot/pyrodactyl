@@ -18,11 +18,28 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended");
 
   // Cache stats data with a 65-second refresh interval
-  const { data: stats, loading: statsLoading } = useCachedValue({
-    key: `server-stats-${server.uuid}`,
-    fetcher: () => getServerResourceUsage(server.uuid),
-    ttl: 65000, // Cache for 65 seconds
-  });
+  const [stats, setStats] = useState<ServerStats | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchStats = async () => {
+      try {
+        const data = await getServerResourceUsage(server.uuid);
+        if (isMounted) setStats(data);
+      } catch {
+        if (isMounted) setStats(null);
+      }
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000); // Fetch every 30 seconds
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [server.uuid]);
 
   
   const showPlayers = localStorage.getItem("player_mc") !== "false";
