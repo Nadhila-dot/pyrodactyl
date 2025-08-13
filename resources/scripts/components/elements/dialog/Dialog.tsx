@@ -2,9 +2,9 @@ import { Dialog as HDialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
 
-
 import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
 import { IconX } from '@tabler/icons-react';
+import Button from '../Button';
 
 const variants = {
     open: {
@@ -73,11 +73,9 @@ const Dialog = ({
                         open={open}
                         onClose={onDialogClose}
                     >
+                        {/* Subtle blurred background */}
                         <div
-                            style={{
-                                background: 'rgba(0,0,0,0.92)',
-                            }}
-                            className={'fixed inset-0 backdrop-blur-xs z-9997'}
+                            className="fixed inset-0 z-9997 bg-transparent backdrop-blur-2xl"
                         />
                         <div className={'fixed inset-0 overflow-y-auto z-9998'}>
                             <div
@@ -115,9 +113,9 @@ const Dialog = ({
                                     {footer}
                                     {!hideCloseIcon && (
                                         <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onClose} className='cursor-pointer'>
+                                            <Button onClick={onClose} className='cursor-pointer'>
                                                 <IconX fill='currentColor' />
-                                            </button>
+                                            </Button>
                                         </div>
                                     )}
                                 </HDialog.Panel>

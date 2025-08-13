@@ -4,5 +4,3 @@
  * basically cuz react router is ass, we need to refersh the location after going to that
  * location, so yuh. 
  */
-
-0813129379
