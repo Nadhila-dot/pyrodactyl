@@ -57,6 +57,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
           .then((data) => {
             console.log("Players object for server", server.name, data);
             setPlayers(data);
+            console.log("Players list:", players.list);
           })
           .catch(() => setPlayers(null));
       }
