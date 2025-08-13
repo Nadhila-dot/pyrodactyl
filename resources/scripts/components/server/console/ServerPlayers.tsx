@@ -8,10 +8,15 @@ import { ServerContext } from "@/state/server";
 const ServerPlayers = () => {
     const allocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
 
-    // Cache players data
+   
+   
+    const showPlayers = localStorage.getItem("player_mc") !== "false";
+
+    // Cache players data if "player_mc" is true
     const { data: players, loading } = useCachedValue({
         key: "server-players",
         fetcher: async () => {
+            if (!showPlayers) return null; // Skip fetching if "player_mc" is false
             const allocation = allocations.find((a) => a.isDefault);
             if (!allocation) return null;
             const ipToUse = allocation.alias || allocation.ip;
@@ -20,7 +25,9 @@ const ServerPlayers = () => {
         ttl: 60000, // Cache for 60 seconds
     });
 
-    if (loading || !players || typeof players.online !== "number" || typeof players.max !== "number") return null;
+    if (!showPlayers || loading || !players || typeof players.online !== "number" || typeof players.max !== "number") {
+        return null; // Don't render anything if "player_mc" is false or data is unavailable
+    }
 
     return (
         <div className="mt-2">

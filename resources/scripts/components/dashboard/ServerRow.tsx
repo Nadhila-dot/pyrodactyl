@@ -18,33 +18,20 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended");
 
   // Cache stats data with a 65-second refresh interval
-  const [stats, setStats] = useState<ServerStats | null>(null);
+  const { data: stats, loading: statsLoading } = useCachedValue({
+    key: `server-stats-${server.uuid}`,
+    fetcher: () => getServerResourceUsage(server.uuid),
+    ttl: 65000, // Cache for 65 seconds
+  });
 
-  useEffect(() => {
-    let isMounted = true;
+  
+  const showPlayers = localStorage.getItem("player_mc") !== "false";
 
-    const fetchStats = async () => {
-      try {
-        const data = await getServerResourceUsage(server.uuid);
-        if (isMounted) setStats(data);
-      } catch {
-        if (isMounted) setStats(null);
-      }
-    };
-
-    fetchStats();
-    const interval = setInterval(fetchStats, 30000); // Refresh every 30 seconds
-
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, [server.uuid]);
-
-  // Cache players data with a 45-second refresh interval
+  // Cache players data with a 45-second refresh interval if "player_mc" is true
   const { data: players, loading: playersLoading } = useCachedValue({
     key: `server-players-${server.uuid}`,
     fetcher: async () => {
+      if (!showPlayers) return null; // Skip fetching if "player_mc" is false
       const allocation = server.allocations.find((a) => a.isDefault);
       if (!allocation) return null;
       const ipToUse = allocation.alias || allocation.ip;
@@ -121,7 +108,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
             </p>
 
             {/* Player badges and count */}
-            {players && typeof players.online === "number" && typeof players.max === "number" && (
+            {showPlayers && players && typeof players.online === "number" && typeof players.max === "number" && (
               <div className="flex items-center gap-2 mt-2">
                 <Badge className="flex items-center gap-1">
                   <IconUser />
