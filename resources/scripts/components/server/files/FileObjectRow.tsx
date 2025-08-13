@@ -19,39 +19,57 @@ import { usePermissions } from '@/plugins/usePermissions';
 import FileDropdownMenu from './FileDropdownMenu';
 import styles from './style.module.css';
 
-import { IconFile, IconFolder, IconWorld, IconFileZip, IconFileCode, IconFileText, IconPuzzle, IconCube } from '@tabler/icons-react';
+import { IconFile, IconFolder, IconWorld, IconFileZip, IconFileCode, IconFileText, IconPuzzle, IconCube, IconUser, IconSettings } from '@tabler/icons-react';
+
+// Todo Add more icons and ability to change brand color
+// in this instance emerald-800 is used as brand color
 
 function getFileIcon(file: FileObject): ReactNode {
     if (!file.isFile) {
         // Handle directories
         if (file.name.toLowerCase().includes('world')) {
-            return <IconWorld size={20} className="text-blue-500" />;
+            return <IconWorld size={20} className="text-emerald-800" />;
         }
 
         if (file.name.toLowerCase().includes('plugins')) {
-            return <IconPuzzle size={20} className="text-blue-500" />;
+            return <IconPuzzle size={20} className="text-emerald-800" />;
         }
 
         if (file.name.toLowerCase().includes('mods')) {
-            return <IconCube size={20} className="text-blue-500" />;
+            return <IconCube size={20} className="text-zinc-800" />;
         }
 
-        return <IconFolder size={20} className="text-yellow-500" />;
+        if (file.name.toLowerCase().includes('config')) {
+            return <IconSettings size={20} className="text-emerald-800" />;
+        }
+
+        
+
+        return <IconFolder size={20} className="text-zinc-800" />;
     }
 
     // Handle files
     if (file.name.endsWith('.zip') || file.name.endsWith('.tar') || file.name.endsWith('.gz')) {
-        return <IconFileZip size={20} className="text-purple-500" />;
+        return <IconFileZip size={20} className="text-zinc-800" />;
     }
+
     if (file.name.endsWith('.js') || file.name.endsWith('.ts') || file.name.endsWith('.json') || file.name.endsWith('.yaml') || file.name.endsWith('.yml') || file.name.endsWith('.py')) {
-        return <IconFileCode size={20} className="text-green-500" />;
+        return <IconFileCode size={20} className="text-zinc-800" />;
     }
+
     if (file.name.endsWith('.txt') || file.name.endsWith('.log')) {
-        return <IconFileText size={20} className="text-gray-500" />;
+        return <IconFileText size={20} className="text-zinc-800" />;
+    }
+
+   
+
+    if (file.name.includes('player')) {
+        return <IconUser size={20} className="text-zinc-800" />;
     }
 
     // Default file icon
-    return <IconFile size={20} className="text-zinc-400" />;
+    // You can replace this with any other icon you prefer
+    return <IconFile size={20} className="text-zinc-800" />;
 }
 
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
