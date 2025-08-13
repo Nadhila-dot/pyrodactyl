@@ -71,14 +71,17 @@ const Console = ({ status: _status }: ConsoleProps) => {
     const [historyIndex, setHistoryIndex] = useState(-1);
 
     // Get server status from context
+    // Black magic to get the server status
     const serverStatus = ServerContext.useStoreState((state) => state.status.value);
 
     // Dynamically compute TERMINAL_PRELUDE
+    // So your company logo ain't fked 
     const TERMINAL_PRELUDE = useMemo(() => {
         return `\u001b[1m\u001b[33mcontainer@${companyName}~ \u001b[0m`;
     }, [companyName]);
 
     // Get company name from window object if available
+    // SSR power my mate
     useEffect(() => {
         if (window.company && window.company.name) {
             // Convert to lowercase and remove spaces for terminal username format
