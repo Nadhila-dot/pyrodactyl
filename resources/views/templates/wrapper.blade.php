@@ -19,9 +19,10 @@ Made with love! (Main repo PYRO)
             <meta name="csrf-token" content="{{ csrf_token() }}">
             <meta name="robots" content="noindex">
 
+            <!-- Version details, internal name for beta versions -->
             <meta name="scan-valid" content="beta-00xj" />
-
-           
+      
+            
             <meta name="apple-mobile-web-app-title" content="Pterodactyl-Contava" />
             <link rel="manifest" href="/favicons/site.webmanifest" />
 

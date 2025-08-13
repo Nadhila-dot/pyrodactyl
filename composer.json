@@ -1,13 +1,13 @@
 {
-    "name": "pyrohost/pyrodactyl",
-    "description": "Pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
+    "name": "nadhi.dev/contava",
+    "description": "Contava is a modern, customer oriented, open-source Pterodactyl Panel based on the Pyro Host fork.",
     "license": "AGPL-3.0-or-later",
     "authors": [
         {
-            "name": "Pyro Host Inc.",
-            "email": "team@pyro.host",
-            "homepage": "https://pyro.host",
-            "role": "Former Maintainer"
+            "name": "Nadhi.dev",
+            "email": "hello@nadhi.dev",
+            "homepage": "https://nadhi.dev",
+            "role": "Author"
         }
     ],
     "require": {

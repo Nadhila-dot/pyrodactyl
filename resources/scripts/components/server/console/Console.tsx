@@ -73,6 +73,11 @@ const Console = ({ status: _status }: ConsoleProps) => {
     // Get server status from context
     const serverStatus = ServerContext.useStoreState((state) => state.status.value);
 
+    // Dynamically compute TERMINAL_PRELUDE
+    const TERMINAL_PRELUDE = useMemo(() => {
+        return `\u001b[1m\u001b[33mcontainer@${companyName}~ \u001b[0m`;
+    }, [companyName]);
+
     // Get company name from window object if available
     useEffect(() => {
         if (window.company && window.company.name) {
@@ -80,8 +85,6 @@ const Console = ({ status: _status }: ConsoleProps) => {
             setCompanyName(window.company.name.toLowerCase().replace(/\s+/g, ''));
         }
     }, []);
-
-    const TERMINAL_PRELUDE = `\u001b[1m\u001b[33mcontainer@${companyName}~ \u001b[0m`;
 
     const handleConsoleOutput = (line: string, prelude = false) =>
         terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
