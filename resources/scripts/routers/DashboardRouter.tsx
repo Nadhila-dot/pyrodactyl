@@ -414,7 +414,7 @@ const DashboardRouter = () => {
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
-                    className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white pl-4 lg:pl-16'
+                    className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-black text-white '
                 >
                     <main
                         className='relative w-full h-full'
