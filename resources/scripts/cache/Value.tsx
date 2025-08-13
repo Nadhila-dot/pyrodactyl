@@ -20,7 +20,7 @@ export const useCachedValue = ({ key, fetcher, ttl = 60000 }: CacheOptions) => {
                 // Use cached data if it's still valid
                 setData(cache[key].value);
                 setLoading(false);
-            } else {
+            } else if (!cache[key] || Date.now() - cache[key].timestamp >= ttl) {
                 // Fetch new data if cache is expired or doesn't exist
                 setLoading(true);
                 try {

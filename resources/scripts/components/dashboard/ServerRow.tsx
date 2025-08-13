@@ -17,11 +17,11 @@ const isAlarmState = (current: number, limit: number): boolean =>
 const ServerRow = ({ server, className }: { server: Server; className?: string }) => {
   const [isSuspended, setIsSuspended] = useState(server.status === "suspended");
 
-  // Cache stats data with a 45-second refresh interval
+  // Cache stats data with a 65-second refresh interval
   const { data: stats, loading: statsLoading } = useCachedValue({
     key: `server-stats-${server.uuid}`,
     fetcher: () => getServerResourceUsage(server.uuid),
-    ttl: 65000, // Cache for 45 seconds
+    ttl: 65000, // Cache for 65 seconds
   });
 
   // Cache players data with a 45-second refresh interval
