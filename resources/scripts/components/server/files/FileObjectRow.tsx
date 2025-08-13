@@ -36,40 +36,36 @@ function getFileIcon(file: FileObject): ReactNode {
         }
 
         if (file.name.toLowerCase().includes('mods')) {
-            return <IconCube size={20} className="text-zinc-800" />;
+            return <IconCube size={20} className="text-zinc-100" />;
         }
 
         if (file.name.toLowerCase().includes('config')) {
             return <IconSettings size={20} className="text-emerald-800" />;
         }
 
-        
-
-        return <IconFolder size={20} className="text-zinc-800" />;
+        return <IconFolder size={20} className="text-zinc-100" />;
     }
 
     // Handle files
     if (file.name.endsWith('.zip') || file.name.endsWith('.tar') || file.name.endsWith('.gz')) {
-        return <IconFileZip size={20} className="text-zinc-800" />;
+        return <IconFileZip size={20} className="text-zinc-100" />;
     }
 
     if (file.name.endsWith('.js') || file.name.endsWith('.ts') || file.name.endsWith('.json') || file.name.endsWith('.yaml') || file.name.endsWith('.yml') || file.name.endsWith('.py')) {
-        return <IconFileCode size={20} className="text-zinc-800" />;
+        return <IconFileCode size={20} className="text-zinc-100" />;
     }
 
     if (file.name.endsWith('.txt') || file.name.endsWith('.log')) {
-        return <IconFileText size={20} className="text-zinc-800" />;
+        return <IconFileText size={20} className="text-zinc-100" />;
     }
 
-   
-
     if (file.name.includes('player')) {
-        return <IconUser size={20} className="text-zinc-800" />;
+        return <IconUser size={20} className="text-zinc-100" />;
     }
 
     // Default file icon
     // You can replace this with any other icon you prefer
-    return <IconFile size={20} className="text-zinc-800" />;
+    return <IconFile size={20} className="text-zinc-100" />;
 }
 
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
