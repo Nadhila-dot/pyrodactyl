@@ -92,10 +92,12 @@ const App = () => {
                     >
                         <Toaster
                             theme='dark'
+                            // Fixed the colors to match our theme
+                            // todo change this emerald-500 into a brand or osmething
                             toastOptions={{
                                 unstyled: true,
                                 classNames: {
-                                    toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
+                                    toast: 'p-4 bg-[#ffffff09] border border-emerald-500 rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
                                 },
                             }}
                         />
