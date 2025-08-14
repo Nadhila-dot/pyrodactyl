@@ -31,7 +31,7 @@ import InstallListener from '@/components/server/InstallListener';
 import TransferListener from '@/components/server/TransferListener';
 import WebsocketHandler from '@/components/server/WebsocketHandler';
 
-import { httpErrorToHuman } from '@/api/http';
+import { httpErrorToHuman, httpStats } from '@/api/http';
 import http from '@/api/http';
 import getNests from '@/api/nests/getNests';
 
@@ -410,6 +410,7 @@ const ServerRouter = () => {
                                 <p className="text-gray-400 text-sm xl:text-sm">
                                     {egg_name || 'Unknown Type'}
                                 </p>
+                                 <p className="text-gray-400 font-thin text-sm xl:text-sm">Total Http requests: {httpStats.totalRequests}</p>
                             </div>
 
                             {/* Navigation */}

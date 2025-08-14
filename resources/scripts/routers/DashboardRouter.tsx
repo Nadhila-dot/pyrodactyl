@@ -26,7 +26,7 @@ import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 import { Player } from '@lordicon/react';
 import { IconBrandUnsplash, IconBrush, IconKey, IconLinkPlus, IconLogout2, IconPalette, IconServer, IconSettings, IconUnlink, IconUser, IconUserShield } from '@tabler/icons-react'
 
-import http from '@/api/http';
+import http, { httpStats } from '@/api/http';
 import Footer from '@/components/Footer/footer';
 import { Separator } from '@/components/ui/separator';
 import ThemeContainer from '@/components/dashboard/ThemeContainer';
@@ -256,6 +256,7 @@ const DashboardRouter = () => {
                             Good {new Date().getHours() >= 12 ? 'evening' : 'morning'}!
                         </h2>
                         <p className="text-gray-400 text-sm xl:text-sm">Welcome back, {user?.username || 'User'}</p>
+                        <p className="text-gray-400 font-thin text-sm xl:text-sm">Total Http requests: {httpStats.totalRequests}</p>
                     </div>
 
 
@@ -340,7 +341,7 @@ const DashboardRouter = () => {
                                     ref={NavigationHome}
                                 >
                                     <IconPalette size={18} className="xl:w-[19px] xl:h-[19px]" />
-                                    <span className="font-medium text-sm xl:text-sm">"Customize"</span>
+                                    <span className="font-medium text-sm xl:text-sm">Panel Settings</span>
                                 </NavLink>
                             </li>
                             {rootAdmin && (

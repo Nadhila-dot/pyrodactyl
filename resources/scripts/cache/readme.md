@@ -25,3 +25,7 @@ Possible cache candidates.
 - Logo
 - Brand Name
 
+
+
+Component Cache System. 
+

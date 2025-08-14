@@ -12,10 +12,18 @@ const http: AxiosInstance = axios.create({
     },
 });
 
+// Object to track HTTP request statistics
+export const httpStats = {
+    totalRequests: 0, // Total number of requests sent
+};
+
 http.interceptors.request.use((req) => {
     if (!req.url?.endsWith('/resources')) {
         store.getActions().progress.startContinuous();
     }
+
+    // Increment the totalRequests counter
+    httpStats.totalRequests += 1;
 
     return req;
 });

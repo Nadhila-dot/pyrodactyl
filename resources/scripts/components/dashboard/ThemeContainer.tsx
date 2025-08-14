@@ -11,6 +11,7 @@ import ThemeSettings from '@/components/dashboard/forms/BackGround';
 import Code from '../elements/Code';
 import FontSettings from './forms/FontSettings';
 import McPlayer from './forms/McPlayer';
+import CacheBox from './forms/Cache';
 
 const ThemeContainer = () => {
     const { state } = useLocation();
@@ -26,8 +27,10 @@ const ThemeContainer = () => {
 
                         <ThemeSettings />
                         <FontSettings />
+                        <CacheBox />
                         {/* Enable or disable showing mc player thing. */}
-                        <McPlayer/>
+                        <McPlayer />
+
 
                     </div>
                     <div className="flex-1 flex flex-col gap-4">

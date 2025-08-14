@@ -58,15 +58,15 @@ loader: beta-00xj
                 margin: 0;
                 padding: 0;
                 font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-                background-color: #000000;
+                background-color: #0a0a0a;
                 color: #ffffff;
                 transition: opacity 0.3s ease-in-out;
             }
             
            
-            #nadhi-mng-body {
+            #nadhi\.dev-app {
                 min-height: 100vh;
-                background-color: #000000;
+                background-color: #0a0a0a;
             }
             
             /* Loading spinner to prevent blank screen */
@@ -184,55 +184,15 @@ loader: beta-00xj
             html, body, * {
                 font-family: var(--main-font, sans-serif) !important;
             }
-            /* Badge styles */
-            .dom-waiting-badge {
-                display: inline-flex;
-                align-items: center;
-                position: fixed;
-                top: 16px;
-                right: 16px;
-                background-color: #18181b;
-                color: #f4f4f5;
-                border-radius: 0.375rem;
-                font-size: 0.875rem;
-                font-weight: 500;
-                padding: 0.25rem 0.75rem;
-                border: 1px solid #27272a;
-                box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-                letter-spacing: 0.01em;
-                z-index: 10000;
-                transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
-                user-select: none;
-                gap: 0.5rem;
-            }
-        </style>
-        <style>
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
         </style>
        
     </head>
 
     <body>
-        <div class="dom-waiting-badge">Waiting for React..</div>
         <!-- Loading screen for zero flash bangs mate -->
-        <div class="app-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div
-                class="loading-spinner"
-                style="
-                    width: 64px;
-                    height: 64px;
-                    border-width: 6px;
-                    border-radius: 50%;
-                    border-color: rgba(255, 255, 255, 0.2); /* Matches default color */
-                    border-top-color: rgb(255, 255, 255);
-                    animation: spin 1s cubic-bezier(0.55, 0.25, 0.25, 0.7) infinite;
-                "
-            ></div>
-            
+         <div class="app-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="loading-spinner" style="width: 32px; height: 32px; border: 2px solid #333; border-top: 2px solid #666; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <p style="margin-top: 8px; font-weight: 100; font-size: 1rem; color: #fff;">Just a moment — making things pretty.</p>
         </div>
         
         <!-- App container -->
@@ -245,19 +205,8 @@ loader: beta-00xj
         </body>
         
         <!-- Signal to React that DOM is ready -->
-        <!-- If the dom is not ready, React will not mount properly -->
         <script>
             window.domReady = true;
-
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const badge = document.querySelector('.dom-waiting-badge');
-                if (badge) {
-                    badge.classList.add('hidden');
-                    setTimeout(() => badge.remove(), 300); // Remove badge after transition
-                }
-            });
         </script>
     </body>
 
