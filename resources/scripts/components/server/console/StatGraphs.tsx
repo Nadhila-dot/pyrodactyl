@@ -1,55 +1,41 @@
 import { faCloudDownloadAlt, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { useEffect, useRef } from 'react';
-import { Line } from 'react-chartjs-2';
+import { useEffect, useRef, useState } from 'react';
 
 import ChartBlock from '@/components/server/console/ChartBlock';
 import { useChart, useChartTickLabel } from '@/components/server/console/chart';
 import { SocketEvent } from '@/components/server/events';
 
 import { bytesToString } from '@/lib/formatters';
-import { hexToRgba } from '@/lib/helpers';
 
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
+
+// use recharts cuz everything else is ugly. 
+import { LineChart, Line, XAxis, YAxis, Tooltip as ReTooltip, ResponsiveContainer, Legend } from 'recharts';
+
+const getAccent = () =>
+    getComputedStyle(document.documentElement).getPropertyValue('--main-color')?.trim() || '#10b981';
 
 const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
 
-    const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
-    const memory = useChartTickLabel('Memory', limits.memory, 'MiB');
-    const network = useChart('Network', {
-        sets: 2,
-        options: {
-            scales: {
-                y: {
-                    ticks: {
-                        callback(value) {
-                            return bytesToString(typeof value === 'string' ? parseInt(value, 10) : value);
-                        },
-                    },
-                },
-            },
-        },
-        callback(opts, index) {
-            return {
-                ...opts,
-                label: !index ? 'Network In' : 'Network Out',
-                borderColor: !index ? '#facc15' : '#60a5fa',
-                backgroundColor: hexToRgba(!index ? '#facc15' : '#60a5fa', 0.09),
-            };
-        },
-    });
+    // Store chart data for shadcn charts
+    const [cpuData, setCpuData] = useState<{ name: string; value: number }[]>([]);
+    const [ramData, setRamData] = useState<{ name: string; value: number }[]>([]);
+    const [networkData, setNetworkData] = useState<{ name: string; in: number; out: number }[]>([]);
+
+    const accentColor = getAccent();
 
     useEffect(() => {
         if (status === 'offline') {
-            cpu.clear();
-            memory.clear();
-            network.clear();
+            setCpuData([]);
+            setRamData([]);
+            setNetworkData([]);
         }
     }, [status]);
 
@@ -60,50 +46,54 @@ const StatGraphs = () => {
         } catch (e) {
             return;
         }
-        cpu.push(values.cpu_absolute);
-        memory.push(Math.floor(values.memory_bytes / 1024 / 1024));
-        network.push([
-            previous.current.tx < 0 ? 0 : Math.max(0, values.network.tx_bytes - previous.current.tx),
-            previous.current.rx < 0 ? 0 : Math.max(0, values.network.rx_bytes - previous.current.rx),
+        setCpuData((prev) => [
+            ...prev.slice(-49),
+            { name: '', value: values.cpu_absolute },
         ]);
-
+        setRamData((prev) => [
+            ...prev.slice(-49),
+            { name: '', value: Math.floor(values.memory_bytes / 1024 / 1024) },
+        ]);
+        setNetworkData((prev) => [
+            ...prev.slice(-49),
+            {
+                name: '',
+                in: previous.current.tx < 0 ? 0 : Math.max(0, values.network.tx_bytes - previous.current.tx),
+                out: previous.current.rx < 0 ? 0 : Math.max(0, values.network.rx_bytes - previous.current.rx),
+            },
+        ]);
         previous.current = { tx: values.network.tx_bytes, rx: values.network.rx_bytes };
     });
 
     return (
         <Tooltip.Provider>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `250ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
+            <div className="transform-gpu skeleton-anim-2" style={{ animationDelay: `250ms` }}>
                 <ChartBlock title={'CPU'}>
-                    <Line aria-label='CPU Usage' role='img' {...cpu.props} />
+                    <ResponsiveContainer width="100%" height={180}>
+                        <LineChart data={cpuData}>
+                            <XAxis dataKey="name" hide />
+                            <YAxis domain={[0, limits.cpu]} tickFormatter={(v) => `${v}%`} />
+                            <ReTooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="value" stroke={accentColor} dot={false} strokeWidth={2} />
+                        </LineChart>
+                    </ResponsiveContainer>
                 </ChartBlock>
             </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `275ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
+            <div className="transform-gpu skeleton-anim-2" style={{ animationDelay: `275ms` }}>
                 <ChartBlock title={'RAM'}>
-                    <Line aria-label='Memory Usage' role='img' {...memory.props} />
+                    <ResponsiveContainer width="100%" height={180}>
+                        <LineChart data={ramData}>
+                            <XAxis dataKey="name" hide />
+                            <YAxis domain={[0, limits.memory]} tickFormatter={(v) => `${v} MiB`} />
+                            <ReTooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="value" stroke={accentColor} dot={false} strokeWidth={2} />
+                        </LineChart>
+                    </ResponsiveContainer>
                 </ChartBlock>
             </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `300ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
+            <div className="transform-gpu skeleton-anim-2" style={{ animationDelay: `300ms` }}>
                 <ChartBlock
                     title={'Network Activity'}
                     legend={
@@ -128,7 +118,6 @@ const StatGraphs = () => {
                                     </Tooltip.Content>
                                 </Tooltip.Portal>
                             </Tooltip.Root>
-
                             <Tooltip.Root delayDuration={200}>
                                 <Tooltip.Trigger asChild>
                                     <div className='flex items-center cursor-default'>
@@ -149,7 +138,16 @@ const StatGraphs = () => {
                         </div>
                     }
                 >
-                    <Line aria-label='Network Activity. Download and upload activity' role='img' {...network.props} />
+                    <ResponsiveContainer width="100%" height={180}>
+                        <LineChart data={networkData}>
+                            <XAxis dataKey="name" hide />
+                            <YAxis tickFormatter={bytesToString} />
+                            <ReTooltip />
+                            <Legend />
+                            <Line type="monotone" dataKey="in" stroke="#facc15" dot={false} strokeWidth={2} name="Inbound" />
+                            <Line type="monotone" dataKey="out" stroke="#60a5fa" dot={false} strokeWidth={2} name="Outbound" />
+                        </LineChart>
+                    </ResponsiveContainer>
                 </ChartBlock>
             </div>
         </Tooltip.Provider>
