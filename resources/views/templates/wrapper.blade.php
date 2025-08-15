@@ -121,7 +121,7 @@ loader: beta-00xj
         <style>
             html, body, * {
                 font-family: var(--main-font, sans-serif) !important;
-                --main-color: {{ $accent }};  /* Accent color for panel. */
+                --main-color: {{ $accent ?? '#10b981' }};  /* Accent color for panel. Defaults to emerald-500 if not set. */
 
             }
             /* Badge styles */
@@ -146,13 +146,7 @@ loader: beta-00xj
                 gap: 0.5rem;
             }
         </style>
-        <style>
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
-        </style>
+        
         <style>
            
             html {
@@ -201,12 +195,11 @@ loader: beta-00xj
             
            
             .loading-spinner {
-                width: 32px;
-                height: 32px;
+               
                 border: 2px solid #333;
                 border-top: 2px solid #666;
                 border-radius: 50%;
-                animation: spin 1s linear infinite;
+               
             }
             
             @keyframes spin {
@@ -233,7 +226,7 @@ loader: beta-00xj
     </head>
 
     <body>
-        <div class="dom-waiting-badge">Waiting for React..</div>
+        <div class="dom-waiting-badge">Powered by Nadhi.dev</div>
         <!-- Loading screen for zero flash bangs mate -->
         <div class="app-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div

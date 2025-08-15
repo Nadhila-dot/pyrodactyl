@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import FlashMessageRender from '../FlashMessageRender';
+import DarkVeil from '../misc/veil';
 
 interface Values {
     user: string;
@@ -172,6 +173,7 @@ function LoginContainer() {
             >
                 {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
                     <form onSubmit={handleSubmit} className="w-full max-w-lg">
+                        <DarkVeil/>
                         <FlashMessageRender />
                         <Card className="bg-black border border-zinc-800 shadow-lg rounded-xl px-10 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
                             <CardHeader>
@@ -282,7 +284,7 @@ function LoginContainer() {
                                     )}
                                 </div>
                             </CardContent>
-                            <CardFooter>
+                            <CardFooter className="flex flex-col gap-2 items-center">
                                 <Button
                                     className="w-full bg-emerald-600 text-white font-bold py-2 rounded-md hover:bg-emerald-700 transition"
                                     type="submit"
@@ -291,8 +293,9 @@ function LoginContainer() {
                                 >
                                     {isSubmitting ? 'Logging in...' : 'Login'}
                                 </Button>
-                                <span className=''>
-                                    Powered by Contava
+                                
+                                <span className="text-xs text-zinc-400 mt-1">
+                                    Pterodactyl &copy; 2014-2025 &middot; Nadhi.dev &copy; 2025
                                 </span>
                             </CardFooter>
                         </Card>

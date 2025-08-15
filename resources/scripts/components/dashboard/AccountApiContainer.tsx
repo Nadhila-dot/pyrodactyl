@@ -71,7 +71,7 @@ const AccountApiContainer = () => {
                 ) : (
                     keys.map((key) => (
                         <div key={key.identifier} className='flex flex-col mb-6 space-y-4'>
-                            <div className='flex items-center justify-between space-x-4 border border-gray-300 rounded-lg p-4 transition duration-200'>
+                            <div className='flex items-center justify-between space-x-4 border border-emerald-500 rounded-lg p-4 transition duration-200'>
                                 <div className='flex-1'>
                                     <p className='text-sm font-medium'>{key.description}</p>
                                     <p className='text-xs text-gray-500 uppercase'>
