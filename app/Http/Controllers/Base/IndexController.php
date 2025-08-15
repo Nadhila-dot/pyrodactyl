@@ -1,11 +1,13 @@
 <?php
 
+
 namespace Pterodactyl\Http\Controllers\Base;
 
 use Illuminate\View\View;
 use Illuminate\View\Factory as ViewFactory;
 use Pterodactyl\Http\Controllers\Controller;
 use Pterodactyl\Contracts\Repository\ServerRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
 {
@@ -23,6 +25,15 @@ class IndexController extends Controller
      */
     public function index(): View
     {
-        return $this->view->make('templates/base.core');
+        // Get accent color from storage or use default
+        $accent = '#10b981';
+        if (Storage::exists('accent.json')) {
+            $data = json_decode(Storage::get('accent.json'), true);
+            $accent = $data['accent'] ?? $accent;
+        }
+
+        return $this->view->make('templates/base.core', [
+            'accent' => $accent,
+        ]);
     }
 }

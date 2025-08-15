@@ -121,7 +121,7 @@ loader: beta-00xj
         <style>
             html, body, * {
                 font-family: var(--main-font, sans-serif) !important;
-                --main-color: #3490dc;  /* Accent color for panel. */
+                --main-color: {{ $accent }};  /* Accent color for panel. */
 
             }
             /* Badge styles */

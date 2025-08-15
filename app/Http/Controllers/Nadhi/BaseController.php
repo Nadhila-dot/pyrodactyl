@@ -25,6 +25,11 @@ class BaseController extends Controller
     protected string $defaultLogo = '/images/default-logo.png';
 
     /**
+     * The default accent color value.
+     */
+    protected string $defaultAccent = '#10b981';
+
+    /**
      * Get the announcement data from storage or use default.
      */
     protected function getAnnouncement(): array
@@ -48,6 +53,19 @@ class BaseController extends Controller
     Storage::put('logo.json', json_encode(['logo' => $this->defaultLogo]));
     return $this->defaultLogo;
 }
+
+    /**
+     * Get the accent color from storage or use default.
+     */
+    protected function getAccent(): string
+    {
+        if (Storage::exists('accent.json')) {
+            $data = json_decode(Storage::get('accent.json'), true);
+            return $data['accent'] ?? $this->defaultAccent;
+        }
+        Storage::put('accent.json', json_encode(['accent' => $this->defaultAccent]));
+        return $this->defaultAccent;
+    }
 
     /**
      * Display the announcement.
@@ -88,5 +106,24 @@ class BaseController extends Controller
         Storage::put('logo.json', json_encode(['logo' => $logo]));
 
         return response()->json(['message' => 'Logo updated.', 'logo' => $logo]);
+    }
+
+    /**
+     * Display the accent color.
+     */
+    public function accent()
+    {
+        return response()->json(['accent' => $this->getAccent()]);
+    }
+
+    /**
+     * Update the accent color and save to storage as JSON.
+     */
+    public function setAccent(Request $request)
+    {
+        $accent = $request->input('accent', $this->defaultAccent);
+        Storage::put('accent.json', json_encode(['accent' => $accent]));
+
+        return response()->json(['message' => 'Accent color updated.', 'accent' => $accent]);
     }
 }

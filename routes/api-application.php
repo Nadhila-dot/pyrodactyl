@@ -9,6 +9,11 @@ use Pterodactyl\Http\Controllers\Nadhi;
 
 // Special case
 
+// Accent color routes
+
+
+Route::post('/admin/settings/logo', [Nadhi\BaseController::class, 'logo'])->name('admin.logo.update');
+Route::post('/admin/settings/accent', [Nadhi\BaseController::class, 'accent'])->name('admin.accent.update');
 // Announcement routes
 Route::get('/admin/announcement', [Nadhi\BaseController::class, 'annouce'])->name('admin.announcement.get');
 Route::post('/admin/announcement/update', [Nadhi\BaseController::class, 'setAnnouncement'])->name('admin.announcement.update');

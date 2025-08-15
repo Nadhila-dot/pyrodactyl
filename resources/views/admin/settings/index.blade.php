@@ -139,4 +139,30 @@
       </div>
     </div>
   </div>
+
+  {{-- Accent Color Settings --}}
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Accent Color Settings</h3>
+        </div>
+        <form action="{{ route('admin.accent.update') }}" method="POST">
+          <div class="box-body">
+            {!! csrf_field() !!}
+            <div class="form-group">
+              <label>Accent Color</label>
+              <input type="text" class="form-control" name="accent" value="{{ old('accent', $accent ?? '#10b981') }}">
+              <p class="text-muted"><small>Enter a hex color (e.g. <code>#10b981</code>) or a valid CSS color value for your panel accent.</small></p>
+            </div>
+          </div>
+          <div class="box-footer">
+            <button type="submit" class="btn btn-sm btn-primary pull-right">Update Accent Color</button>
+          </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+
 @endsection
