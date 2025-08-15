@@ -37,13 +37,122 @@ loader: beta-00xj
             <meta name="darkreader-lock">
         @show
         
+       
         <!-- Load fonts with display=swap to prevent invisible text -->
         <style>
             @import url('https://fonts.bunny.net/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
         </style>
+
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-        <!-- Flash preventer 5000 -->
+       
+        
+
+
+
+        
+
+        <!-- Loading management script -->
+        <script>
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('loading');
+                
+              
+                window.addEventListener('load', function() {
+                    setTimeout(function() {
+                        const loadingScreen = document.querySelector('.app-loading');
+                        if (loadingScreen) {
+                            loadingScreen.classList.add('hidden');
+                            setTimeout(() => {
+                                loadingScreen.remove();
+                                document.body.classList.remove('loading');
+                            }, 300);
+                        }
+                    }, 100);
+                });
+            });
+            
+            // Handle theme changes smoothly
+            window.enableThemeTransition = function() {
+                document.body.classList.add('theme-transition');
+                setTimeout(() => {
+                    document.body.classList.remove('theme-transition');
+                }, 200);
+            };
+        </script>
+        
+        @yield('assets')
+        @include('layouts.scripts')
+
+       @viteReactRefresh
+       @vite('resources/scripts/index.tsx')
+
+       <!-- Pterodactyl Scripts -->
+       <script>
+            window.company = window.company || {};
+            window.company.name = "{{ config('app.name', 'Panel') }}";
+        </script>
+        <script>
+        (function() {
+            // Get stored accent color from localStorage
+            const accent = localStorage.getItem('accent');
+            
+            if (accent) {
+                // Apply it to the root element
+                document.documentElement.style.setProperty('--main-color', accent);
+            }
+        })();
+        </script>
+
+        @section('user-data')
+            @if(!is_null(Auth::user()))
+                <script>
+                    window.PterodactylUser = {!! json_encode(Auth::user()->toVueObject()) !!};
+                </script>
+            @endif
+            @if(!empty($siteConfiguration))
+                <script>
+                    window.SiteConfiguration = {!! json_encode($siteConfiguration) !!};
+                </script>
+            @endif
+        @show
+       
+        <style>
+            html, body, * {
+                font-family: var(--main-font, sans-serif) !important;
+                --main-color: #3490dc;  /* Accent color for panel. */
+
+            }
+            /* Badge styles */
+            .dom-waiting-badge {
+                display: inline-flex;
+                align-items: center;
+                position: fixed;
+                top: 16px;
+                right: 16px;
+                background-color: #18181b;
+                color: #f4f4f5;
+                border-radius: 0.375rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                padding: 0.25rem 0.75rem;
+                border: 1px solid #27272a;
+                box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+                letter-spacing: 0.01em;
+                z-index: 10000;
+                transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
+                user-select: none;
+                gap: 0.5rem;
+            }
+        </style>
+        <style>
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
         <style>
            
             html {
@@ -118,99 +227,6 @@ loader: beta-00xj
            
             .theme-transition * {
                 transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
-            }
-        </style>
-
-
-
-        
-
-        <!-- Loading management script -->
-        <script>
-            // Prevent flash by managing loading state
-            document.addEventListener('DOMContentLoaded', function() {
-                document.body.classList.add('loading');
-                
-                // Hide loading screen after React app mounts
-                window.addEventListener('load', function() {
-                    setTimeout(function() {
-                        const loadingScreen = document.querySelector('.app-loading');
-                        if (loadingScreen) {
-                            loadingScreen.classList.add('hidden');
-                            setTimeout(() => {
-                                loadingScreen.remove();
-                                document.body.classList.remove('loading');
-                            }, 300);
-                        }
-                    }, 100);
-                });
-            });
-            
-            // Handle theme changes smoothly
-            window.enableThemeTransition = function() {
-                document.body.classList.add('theme-transition');
-                setTimeout(() => {
-                    document.body.classList.remove('theme-transition');
-                }, 200);
-            };
-        </script>
-        
-        @yield('assets')
-        @include('layouts.scripts')
-
-       @viteReactRefresh
-       @vite('resources/scripts/index.tsx')
-
-       <!-- Pterodactyl Scripts -->
-       <script>
-            window.company = window.company || {};
-            window.company.name = "{{ config('app.name', 'Panel') }}";
-        </script>
-
-        @section('user-data')
-            @if(!is_null(Auth::user()))
-                <script>
-                    window.PterodactylUser = {!! json_encode(Auth::user()->toVueObject()) !!};
-                </script>
-            @endif
-            @if(!empty($siteConfiguration))
-                <script>
-                    window.SiteConfiguration = {!! json_encode($siteConfiguration) !!};
-                </script>
-            @endif
-        @show
-       
-        <style>
-            html, body, * {
-                font-family: var(--main-font, sans-serif) !important;
-            }
-            /* Badge styles */
-            .dom-waiting-badge {
-                display: inline-flex;
-                align-items: center;
-                position: fixed;
-                top: 16px;
-                right: 16px;
-                background-color: #18181b;
-                color: #f4f4f5;
-                border-radius: 0.375rem;
-                font-size: 0.875rem;
-                font-weight: 500;
-                padding: 0.25rem 0.75rem;
-                border: 1px solid #27272a;
-                box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-                letter-spacing: 0.01em;
-                z-index: 10000;
-                transition: opacity 0.3s cubic-bezier(.4,0,.2,1);
-                user-select: none;
-                gap: 0.5rem;
-            }
-        </style>
-        <style>
-            @keyframes spin {
-                to {
-                    transform: rotate(360deg);
-                }
             }
         </style>
        

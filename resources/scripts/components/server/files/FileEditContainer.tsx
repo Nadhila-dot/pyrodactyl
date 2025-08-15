@@ -238,7 +238,7 @@ const FileEditContainer = () => {
                             <button
                                 style={{
                                     background:
-                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
+                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, var(--main-color) 0%, var(--main-color) 100%)',
                                 }}
                                 className='h-[46px] pl-8 pr-6 py-3 border-[1px] border-[#ffffff12] rounded-l-full text-sm font-bold shadow-md cursor-pointer'
                                 onClick={() => save()}
@@ -252,7 +252,7 @@ const FileEditContainer = () => {
                                 <DropdownMenuTrigger
                                     style={{
                                         background:
-                                            'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
+                                            'radial-gradient(109.26% 109.26% at 49.83% 13.37%, var(--main-color) 0%, var(--main-color) 100%)',
                                     }}
                                     className='h-[46px] px-2 py-3 border-[1px] border-[#ffffff12] rounded-r-full text-sm font-bold shadow-md'
                                 >
@@ -286,8 +286,8 @@ const FileEditContainer = () => {
                     <Can action={'file.create'}>
                         <button
                             style={{
-                                    background:
-                                        'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
+                                background:
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, rgb(16, 185, 129) 0%, rgb(5, 150, 105) 100%)',
                             }}
                             className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md cursor-pointer'
                             onClick={() => setModalVisible(true)}

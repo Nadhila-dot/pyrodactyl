@@ -12,6 +12,7 @@ import Code from '../elements/Code';
 import FontSettings from './forms/FontSettings';
 import McPlayer from './forms/McPlayer';
 import CacheBox from './forms/Cache';
+import AccentColors from './forms/AccentColors';
 
 const ThemeContainer = () => {
     const { state } = useLocation();
@@ -26,6 +27,7 @@ const ThemeContainer = () => {
                     <div className="flex-1 flex flex-col gap-4">
 
                         <ThemeSettings />
+                        <AccentColors />
                         <FontSettings />
                         <CacheBox />
                         {/* Enable or disable showing mc player thing. */}
