@@ -3,7 +3,7 @@ import { Turnstile } from '@marsidev/react-turnstile';
 import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import { IconLock, IconUser } from '@tabler/icons-react';
@@ -18,6 +18,8 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import FlashMessageRender from '../FlashMessageRender';
 import DarkVeil from '../misc/veil';
+import Galaxy from '../Galaxy/Galaxy';
+
 
 interface Values {
     user: string;
@@ -61,6 +63,30 @@ function LoginContainer() {
             setFriendlyLoaded(true);
         }
     }, []);
+
+    function usePingPong360(speed: number = 1) {
+    const [value, setValue] = useState(1);
+    const direction = useRef(1);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setValue(prev => {
+                let next = prev + direction.current * speed;
+                if (next >= 360) {
+                    next = 360;
+                    direction.current = -1;
+                } else if (next <= 1) {
+                    next = 1;
+                    direction.current = 1;
+                }
+                return next;
+            });
+        }, 16); // ~60fps
+        return () => clearInterval(interval);
+    }, [speed]);
+
+    return value;
+}
 
     const resetCaptcha = () => {
         setToken('');
@@ -136,8 +162,22 @@ function LoginContainer() {
             });
     };
 
+   
+
     return (
         <div className="flex w-full items-center justify-center min-h-screen bg-black relative overflow-hidden">
+             <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                <Galaxy 
+                mouseRepulsion={true}
+                mouseInteraction={true}
+                density={1.5}
+                glowIntensity={0.1}
+               
+            />
+             <DarkVeil speed={2} scanlineFrequency={3} hueShift={120} />
+             
+            </div>
+           
             {/* Logo background effect
             
             {logoUrl && (
@@ -295,7 +335,7 @@ function LoginContainer() {
                                 </Button>
                                 
                                 <span className="text-xs text-zinc-400 mt-1">
-                                    Pterodactyl &copy; 2014-2025 &middot; Nadhi.dev &copy; 2025
+                                    Pterodactyl &copy; 2014-2025 &middot; {window.SiteConfiguration.name} &copy; 2025
                                 </span>
                             </CardFooter>
                         </Card>
