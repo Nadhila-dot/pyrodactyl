@@ -173,7 +173,7 @@ function LoginContainer() {
             >
                 {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
                     <form onSubmit={handleSubmit} className="w-full max-w-lg">
-                        <DarkVeil/>
+
                         <FlashMessageRender />
                         <Card className="bg-black border border-zinc-800 shadow-lg rounded-xl px-10 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
                             <CardHeader>
