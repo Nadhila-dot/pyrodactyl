@@ -23,7 +23,7 @@ docker-compose.yml
 /var
 
 # for image related files
-misc
+
 .php-cs-fixer.cache
 coverage.xml
 resources/lang/locales.js
