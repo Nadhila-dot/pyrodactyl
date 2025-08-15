@@ -1,3 +1,5 @@
+<!-- Core.blade.php -->
+
 @extends('templates/wrapper', [
     'css' => ['body' => 'bg-black'],
 ])

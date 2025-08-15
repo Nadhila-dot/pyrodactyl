@@ -7,6 +7,13 @@ import { PowerAction } from '@/components/server/console/ServerConsoleContainer'
 
 import { ServerContext } from '@/state/server';
 
+/**
+ * Todo on this file
+ * 
+ *  Add support to custom accent colors
+ *  Add support to custom background colors
+ */
+
 interface PowerButtonProps {
     className?: string;
 }
