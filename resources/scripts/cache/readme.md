@@ -23,7 +23,7 @@ Background Fetch and Refersh Data Jobs.
 Possible cache candidates.
 
 - Logo
-- Brand Name
+- Brand Namer
 
 
 

@@ -17,4 +17,4 @@ Todo
 - Add recyling bin (Added)
 - Custom spinners and loaders
 - (Plugin as panel) Ecosystem.
-- 
+- Auto delete trash after set ammout of time. 

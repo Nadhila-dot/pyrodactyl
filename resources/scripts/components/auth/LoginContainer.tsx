@@ -19,6 +19,9 @@ import { Button } from '@/components/ui/button';
 import FlashMessageRender from '../FlashMessageRender';
 import DarkVeil from '../misc/veil';
 import Galaxy from '../Galaxy/Galaxy';
+import LightRays from '../LightRays/LightRays';
+import PyroLogo from '../elements/PyroLogo';
+import { Separator } from '../ui/separator';
 
 
 interface Values {
@@ -65,28 +68,28 @@ function LoginContainer() {
     }, []);
 
     function usePingPong360(speed: number = 1) {
-    const [value, setValue] = useState(1);
-    const direction = useRef(1);
+        const [value, setValue] = useState(1);
+        const direction = useRef(1);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setValue(prev => {
-                let next = prev + direction.current * speed;
-                if (next >= 360) {
-                    next = 360;
-                    direction.current = -1;
-                } else if (next <= 1) {
-                    next = 1;
-                    direction.current = 1;
-                }
-                return next;
-            });
-        }, 16); // ~60fps
-        return () => clearInterval(interval);
-    }, [speed]);
+        useEffect(() => {
+            const interval = setInterval(() => {
+                setValue(prev => {
+                    let next = prev + direction.current * speed;
+                    if (next >= 360) {
+                        next = 360;
+                        direction.current = -1;
+                    } else if (next <= 1) {
+                        next = 1;
+                        direction.current = 1;
+                    }
+                    return next;
+                });
+            }, 16); // ~60fps
+            return () => clearInterval(interval);
+        }, [speed]);
 
-    return value;
-}
+        return value;
+    }
 
     const resetCaptcha = () => {
         setToken('');
@@ -162,186 +165,183 @@ function LoginContainer() {
             });
     };
 
-   
+
 
     return (
-        <div className="flex w-full items-center justify-center min-h-screen bg-black relative overflow-hidden">
-             <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-                <Galaxy 
-                mouseRepulsion={true}
-                mouseInteraction={true}
-                density={1.5}
-                glowIntensity={0.1}
-               
-            />
-             <DarkVeil speed={2} scanlineFrequency={3} hueShift={120} />
-             
-            </div>
-           
-            {/* Logo background effect
-            
-            {logoUrl && (
-                <img
-                    src={logoUrl}
-                    alt="Logo"
-                    className="absolute bottom-[-40px] right-[-60px] w-[320px] h-[160px] object-cover opacity-25 pointer-events-none select-none"
-                    style={{
-                        transform: 'rotate(-15deg) scaleX(1.1)',
-                        clipPath: 'inset(50% 0 0 0)',
-                        zIndex: 0,
-                    }}
-                />
-            )}*/}
-
-            {/* Flash message display */}
-            {flashes && flashes.length > 0 && (
-                <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 w-full max-w-lg">
-                    {flashes.map((flash, i) => (
-                        <div key={i} className="bg-red-700 text-white px-4 py-2 rounded mb-2 shadow">
-                            {flash.message || flash.error?.message || flash.detail || flash}
-                        </div>
-                    ))}
+        <div
+            className="flex items-center justify-center min-h-screen w-full bg-black bg-cover bg-center"
+            style={{
+                backgroundImage: `url('https://images.wallpapersden.com/image/download/black-4k-windows-11-original_bmVsbWaUmZqaraWkpJRobWllrWdpZWU.jpg')`,
+            }}
+        >
+            <div className="absolute inset-0 bg-black/70 pointer-events-none" />
+            <div className="relative z-10 w-full max-w-2xl px-4"> {/* Increased max-w-lg to max-w-2xl */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <DarkVeil speed={2} scanlineFrequency={3} hueShift={120} />
                 </div>
-            )}
-            <Formik
-                onSubmit={onSubmit}
-                initialValues={{ user: '', password: '' }}
-                validationSchema={object().shape({
-                    user: string().required('A username or email must be provided.'),
-                    password: string().required('Please enter your account password.'),
-                })}
-            >
-                {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
-                    <form onSubmit={handleSubmit} className="w-full max-w-lg">
+                <div className="relative">
+                    {/* Flash message display */}
+                    {flashes && flashes.length > 0 && (
+                        <div className="w-full max-w-2xl mb-4">
+                            {flashes.map((flash, i) => (
+                                <div key={i} className="bg-red-700 text-white px-4 py-2 rounded mb-2 shadow">
+                                    {flash.message || flash.error?.message || flash.detail || flash}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <Formik
+                        onSubmit={onSubmit}
+                        initialValues={{ user: '', password: '' }}
+                        validationSchema={object().shape({
+                            user: string().required('A username or email must be provided.'),
+                            password: string().required('Please enter your account password.'),
+                        })}
+                    >
+                        {({ isSubmitting, handleChange, values, errors, touched, handleSubmit }) => (
+                            <form onSubmit={handleSubmit} className="w-full max-w-xl"> {/* Increased max-w-lg to max-w-2xl */}
+                                <FlashMessageRender />
+                                <Card className="bg-black/80 border border-zinc-800 shadow-lg rounded-xl px-4 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
+                                    <CardHeader>
+                                        <CardTitle className="flex flex-col items-start gap-2">
+                                            <div className="flex items-center gap-4 w-full">
+                                                {logoUrl && (
+                                                    <img
+                                                        src={logoUrl}
+                                                        alt="Logo"
+                                                        className="h-16 mb-2"
+                                                        style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.2))' }}
+                                                    />
+                                                )}
+                                                <span className="text-5xl text-white font-bold">
+                                                    {window.company?.name || 'Panel'}
+                                                </span>
+                                            </div>
+                                            <Separator className="bg-zinc-500/40  opacity-70" />
+                                           
+                                        </CardTitle>
+                                        
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="user" className={`text-base sm:text-lg text-gray-200`}>
+                                                    Username or Email
+                                                </Label>
+                                                <div className="relative">
+                                                    <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                                    <Input
+                                                        id="user"
+                                                        name="user"
+                                                        type="text"
+                                                        placeholder="example@example.com"
+                                                        value={values.user}
+                                                        onChange={handleChange}
+                                                        className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
+                                                        disabled={isSubmitting}
+                                                        autoComplete="username"
+                                                    />
+                                                </div>
+                                                {touched.user && errors.user && (
+                                                    <p className="text-sm text-red-500">{errors.user}</p>
+                                                )}
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <Label htmlFor="password" className="text-base sm:text-lg text-gray-200">
+                                                        Password
+                                                    </Label>
+                                                    <Link
+                                                        to="/auth/password"
+                                                        className="text-xs text-zinc-400 tracking-wide no-underline hover:text-emerald-500"
+                                                    >
+                                                        Forgot Password?
+                                                    </Link>
+                                                </div>
+                                                <div className="relative">
+                                                    <IconLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                                                    <Input
+                                                        id="password"
+                                                        name="password"
+                                                        type="password"
+                                                        placeholder="••••••••"
+                                                        value={values.password}
+                                                        onChange={handleChange}
+                                                        className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
+                                                        disabled={isSubmitting}
+                                                        autoComplete="current-password"
+                                                    />
+                                                </div>
+                                                {touched.password && errors.password && (
+                                                    <p className="text-sm text-red-500">{errors.password}</p>
+                                                )}
+                                            </div>
+                                            {isTurnstileEnabled && (
+                                                <div className="mt-4">
+                                                    <Turnstile
+                                                        ref={turnstileRef}
+                                                        siteKey={captcha.turnstile.siteKey}
+                                                        onSuccess={handleCaptchaComplete}
+                                                        onError={() => handleCaptchaError('Turnstile')}
+                                                        onExpire={handleCaptchaExpire}
+                                                        options={{
+                                                            theme: 'dark',
+                                                            size: 'flexible',
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                            {isFriendlyEnabled && friendlyLoaded && (
+                                                <div className="mt-4">
+                                                    <FriendlyCaptcha
+                                                        ref={friendlyCaptchaRef}
+                                                        sitekey={captcha.friendly.siteKey}
+                                                        onComplete={handleCaptchaComplete}
+                                                        onError={() => handleCaptchaError('FriendlyCaptcha')}
+                                                        onExpire={handleCaptchaExpire}
+                                                    />
+                                                </div>
+                                            )}
+                                            {isHCaptchaEnabled && (
+                                                <div className="mt-4">
+                                                    <HCaptcha
+                                                        ref={hCaptchaRef}
+                                                        sitekey={captcha.hcaptcha.siteKey}
+                                                        onVerify={handleCaptchaComplete}
+                                                        onError={() => handleCaptchaError('hCaptcha')}
+                                                        onExpire={handleCaptchaExpire}
+                                                        theme="dark"
+                                                        size="normal"
+                                                    />
+                                                </div>
+                                            )}
+                                            {isMCaptchaEnabled && (
+                                                <div className="mt-4">
+                                                    <p className="text-red-500">mCaptcha implementation needed</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter className="flex flex-col gap-2 items-center">
+                                        <Button
+                                            className="w-full bg-emerald-600 text-white font-bold py-2 rounded-md hover:bg-emerald-700 transition"
+                                            type="submit"
+                                            size="lg"
+                                            disabled={isSubmitting}
+                                        >
+                                            {isSubmitting ? 'Logging in...' : 'Login'}
+                                        </Button>
 
-                        <FlashMessageRender />
-                        <Card className="bg-black border border-zinc-800 shadow-lg rounded-xl px-10 py-12 relative overflow-hidden" style={{ zIndex: 1 }}>
-                            <CardHeader>
-                                <CardTitle className="text-white text-2xl font-bold text-left">
-                                    Login to {window.company.name}
-                                </CardTitle>
-                                <div className="text-zinc-400 ">
-                                    Enter your credentials to access your account
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="user" className={`text-base sm:text-lg text-gray-200`}>
-                                            Username or Email
-                                        </Label>
-                                        <div className="relative">
-                                            <IconUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                                            <Input
-                                                id="user"
-                                                name="user"
-                                                type="text"
-                                                placeholder="example@example.com"
-                                                value={values.user}
-                                                onChange={handleChange}
-                                                className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
-                                                disabled={isSubmitting}
-                                                autoComplete="username"
-                                            />
-                                        </div>
-                                        {touched.user && errors.user && (
-                                            <p className="text-sm text-red-500">{errors.user}</p>
-                                        )}
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <Label htmlFor="password" className="text-base sm:text-lg text-gray-200">
-                                                Password
-                                            </Label>
-                                            <Link
-                                                to="/auth/password"
-                                                className="text-xs text-zinc-400 tracking-wide no-underline hover:text-emerald-500"
-                                            >
-                                                Forgot Password?
-                                            </Link>
-                                        </div>
-                                        <div className="relative">
-                                            <IconLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                                            <Input
-                                                id="password"
-                                                name="password"
-                                                type="password"
-                                                placeholder="••••••••"
-                                                value={values.password}
-                                                onChange={handleChange}
-                                                className="pl-10 h-12 w-full bg-zinc-900 border-gray-700 text-white"
-                                                disabled={isSubmitting}
-                                                autoComplete="current-password"
-                                            />
-                                        </div>
-                                        {touched.password && errors.password && (
-                                            <p className="text-sm text-red-500">{errors.password}</p>
-                                        )}
-                                    </div>
-                                    {isTurnstileEnabled && (
-                                        <div className="mt-4">
-                                            <Turnstile
-                                                ref={turnstileRef}
-                                                siteKey={captcha.turnstile.siteKey}
-                                                onSuccess={handleCaptchaComplete}
-                                                onError={() => handleCaptchaError('Turnstile')}
-                                                onExpire={handleCaptchaExpire}
-                                                options={{
-                                                    theme: 'dark',
-                                                    size: 'flexible',
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                    {isFriendlyEnabled && friendlyLoaded && (
-                                        <div className="mt-4">
-                                            <FriendlyCaptcha
-                                                ref={friendlyCaptchaRef}
-                                                sitekey={captcha.friendly.siteKey}
-                                                onComplete={handleCaptchaComplete}
-                                                onError={() => handleCaptchaError('FriendlyCaptcha')}
-                                                onExpire={handleCaptchaExpire}
-                                            />
-                                        </div>
-                                    )}
-                                    {isHCaptchaEnabled && (
-                                        <div className="mt-4">
-                                            <HCaptcha
-                                                ref={hCaptchaRef}
-                                                sitekey={captcha.hcaptcha.siteKey}
-                                                onVerify={handleCaptchaComplete}
-                                                onError={() => handleCaptchaError('hCaptcha')}
-                                                onExpire={handleCaptchaExpire}
-                                                theme="dark"
-                                                size="normal"
-                                            />
-                                        </div>
-                                    )}
-                                    {isMCaptchaEnabled && (
-                                        <div className="mt-4">
-                                            <p className="text-red-500">mCaptcha implementation needed</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </CardContent>
-                            <CardFooter className="flex flex-col gap-2 items-center">
-                                <Button
-                                    className="w-full bg-emerald-600 text-white font-bold py-2 rounded-md hover:bg-emerald-700 transition"
-                                    type="submit"
-                                    size="lg"
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? 'Logging in...' : 'Login'}
-                                </Button>
-                                
-                                <span className="text-xs text-zinc-400 mt-1">
-                                    Pterodactyl &copy; 2014-2025 &middot; {window.SiteConfiguration.name} &copy; 2025
-                                </span>
-                            </CardFooter>
-                        </Card>
-                    </form>
-                )}
-            </Formik>
+                                        <span className="text-xs text-zinc-400 mt-1">
+                                            Pterodactyl &copy; 2014-2025 &middot; {window.SiteConfiguration.name} &copy; 2025
+                                        </span>
+                                    </CardFooter>
+                                </Card>
+                            </form>
+                        )}
+                    </Formik>
+                </div>
+            </div>
         </div>
     );
 }
