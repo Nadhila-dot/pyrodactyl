@@ -14,13 +14,16 @@ export default (uuid: string, directory: string, files: string[]): Promise<void>
     const user = (window as any).PterodactylUser?.username || 'contava';
     const trashDir = `/trash-${user}`;
 
+    // Ensure directory does not end with a slash unless it's root
+    const normalizedDir = directory === '/' ? '' : directory.replace(/\/$/, '');
+
     const renameFiles: RenameData[] = files.map(filename => ({
-        from: filename,
-        to: `${filename}`,
+        from: normalizedDir ? `${normalizedDir}/${filename}` : filename,
+        to: `${trashDir}/${normalizedDir ? `${normalizedDir}/` : ''}${filename}`,
     }));
 
     return new Promise((resolve, reject) => {
-        http.put(`/api/client/servers/${uuid}/files/rename`, { root: trashDir, files: renameFiles })
+        http.put(`/api/client/servers/${uuid}/files/rename`, { root: '/', files: renameFiles })
             .then(() => resolve())
             .catch(reject);
     });
