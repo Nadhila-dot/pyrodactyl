@@ -20,6 +20,7 @@ import FileDropdownMenu from './FileDropdownMenu';
 import styles from './style.module.css';
 
 import { IconFile, IconFolder, IconWorld, IconFileZip, IconFileCode, IconFileText, IconPuzzle, IconCube, IconUser, IconSettings, IconFolderCog, IconFolderPlus } from '@tabler/icons-react';
+import { LucideTrash2 } from 'lucide-react';
 
 // Todo Add more icons and ability to change brand color
 // in this instance emerald-800 is used as brand color
@@ -29,6 +30,10 @@ function getFileIcon(file: FileObject): ReactNode {
         // Handle directories
         if (file.name.toLowerCase().includes('world')) {
             return <IconWorld size={20} className="text-emerald-800" />;
+        }
+
+        if (file.name.toLowerCase().includes('trash')) {
+            return <LucideTrash2 size={20} className="text-red-500" />;
         }
 
         if (file.name.toLowerCase().includes('plugins')) {
