@@ -2,7 +2,7 @@ import http from '@/api/http';
 
 /**
  * Moves files to a trash directory by renaming them.
- * The root is always /trash-${user}
+ * This is a workaround for the lack of a true trash system in the API :(
  */
 
 interface RenameData {
@@ -10,17 +10,17 @@ interface RenameData {
     to: string;
 }
 
-export default (uuid: string, files: string[]): Promise<void> => {
+export default (uuid: string, directory: string, files: string[]): Promise<void> => {
     const user = (window as any).PterodactylUser?.username || 'contava';
-    const trashRoot = `/trash-${user}`;
+    const trashDir = `/trash-${user}`;
 
     const renameFiles: RenameData[] = files.map(filename => ({
         from: filename,
-        to: filename, // keep the same filename in trash
+        to: `${filename}`,
     }));
 
     return new Promise((resolve, reject) => {
-        http.put(`/api/client/servers/${uuid}/files/rename`, { root: trashRoot, files: renameFiles })
+        http.put(`/api/client/servers/${uuid}/files/rename`, { root: trashDir, files: renameFiles })
             .then(() => resolve())
             .catch(reject);
     });

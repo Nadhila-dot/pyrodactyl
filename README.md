@@ -14,4 +14,7 @@ Features added.
 
 
 Todo
-- Add recyling bin 
+- Add recyling bin (Added)
+- Custom spinners and loaders
+- (Plugin as panel) Ecosystem.
+- 
