@@ -11,4 +11,7 @@ Features added.
 -  Plugins / Addons Settings. 
 -  Removal of All pyro based branding, allow hosting companies to change branding as they wish. 
 -  Changable Logo
--  
+
+
+Todo
+- Add recyling bin 

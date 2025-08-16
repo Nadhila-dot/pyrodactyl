@@ -13,6 +13,8 @@ import { ServerContext } from '@/state/server';
 
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
+import { toast } from 'sonner';
+import trashFile from '@/api/server/files/trashFile';
 
 const MassActionsBar = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -51,6 +53,25 @@ const MassActionsBar = () => {
         setLoadingMessage('Deleting files...');
 
         deleteFiles(uuid, directory, selectedFiles)
+            .then(async () => {
+                await mutate((files) => files!.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
+                setSelectedFiles([]);
+            })
+            .catch(async (error) => {
+                await mutate();
+                clearAndAddHttpError({ key: 'files', error });
+            })
+            .then(() => setLoading(false));
+    };
+
+    const onClickConfirmTrash = () => {
+        setLoading(true);
+        setShowConfirm(false);
+        clearFlashes('files');
+        setLoadingMessage('Trashing files...');
+        toast.info('Files are being moved to the trash directory.');
+
+        trashFile(uuid, directory, selectedFiles)
             .then(async () => {
                 await mutate((files) => files!.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
                 setSelectedFiles([]);
@@ -103,6 +124,7 @@ const MassActionsBar = () => {
                         <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
                             <Button onClick={() => setShowMove(true)}>Move</Button>
                             <Button onClick={onClickCompress}>Archive</Button>
+                            <Button onClick={onClickConfirmTrash}>Move to Trash</Button>
                             <Button.Danger variant={Button.Variants.Secondary} onClick={() => setShowConfirm(true)}>
                                 Delete
                             </Button.Danger>

@@ -19,7 +19,7 @@ import { usePermissions } from '@/plugins/usePermissions';
 import FileDropdownMenu from './FileDropdownMenu';
 import styles from './style.module.css';
 
-import { IconFile, IconFolder, IconWorld, IconFileZip, IconFileCode, IconFileText, IconPuzzle, IconCube, IconUser, IconSettings } from '@tabler/icons-react';
+import { IconFile, IconFolder, IconWorld, IconFileZip, IconFileCode, IconFileText, IconPuzzle, IconCube, IconUser, IconSettings, IconFolderCog, IconFolderPlus } from '@tabler/icons-react';
 
 // Todo Add more icons and ability to change brand color
 // in this instance emerald-800 is used as brand color
@@ -40,7 +40,7 @@ function getFileIcon(file: FileObject): ReactNode {
         }
 
         if (file.name.toLowerCase().includes('config')) {
-            return <IconSettings size={20} className="text-emerald-800" />;
+            return <IconFolderCog size={20} className="text-emerald-800" />;
         }
 
         return <IconFolder size={20} className="text-zinc-100" />;

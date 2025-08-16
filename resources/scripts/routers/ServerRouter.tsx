@@ -393,11 +393,11 @@ const ServerRouter = () => {
                         {/* Sidebar Content */}
                         <div className="flex flex-col h-full p-4 xl:p-5">
                             {/* Header */}
-                            <div className='flex items-center justify-between mb-4 xl:ml-3 lg:ml-3 xl:mb-5'>
-                                <NavLink to={'/'} className='flex items-center'>
-                                    <div className="scale-100 xl:scale-105 transition-transform duration-200">
+                            <div className='flex items-center justify-between mb-3 xl:mb-4'>
+                                <NavLink to={'/'} className='flex items-center w-full justify-start'>
+                                    <div className="scale-100 xl:scale-105 transition-transform duration-200 ml-1">
                                         <Logo />
-                                        <Separator className="max-w-1/3 mt-3 mr-2 opacity-25" />
+                                        <Separator className="mt-2 mr-2 max-w-1/3 opacity-25" />
                                     </div>
                                 </NavLink>
                             </div>

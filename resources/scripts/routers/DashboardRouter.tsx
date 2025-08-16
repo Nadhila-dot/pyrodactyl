@@ -168,6 +168,8 @@ const DashboardRouter = () => {
     const NavigationApi = useRef(null);
     const NavigationSSH = useRef(null);
 
+
+    //@ts-ignore
     const user = window.PterodactylUser;
 
     const calculateTop = (pathname: string) => {

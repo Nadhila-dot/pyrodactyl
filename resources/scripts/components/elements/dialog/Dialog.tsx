@@ -69,6 +69,7 @@ const Dialog = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        //@ts-ignore
                         transition={{ duration: 0.15 }}
                         open={open}
                         onClose={onDialogClose}
@@ -89,6 +90,7 @@ const Dialog = ({
                                     initial={'closed'}
                                     animate={down ? 'bounce' : 'open'}
                                     exit={'closed'}
+                                    // @ts-ignore
                                     variants={variants}
                                     className={`${styles.panel} bg-black border-2 border-emerald-500 shadow-lg`}
                                 >

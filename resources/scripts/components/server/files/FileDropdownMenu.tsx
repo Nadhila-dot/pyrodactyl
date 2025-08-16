@@ -27,6 +27,8 @@ import { ServerContext } from '@/state/server';
 
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
+import trashFile from '@/api/server/files/trashFile';
+import { IconTrash } from '@tabler/icons-react';
 
 type ModalType = 'rename' | 'move' | 'chmod';
 
@@ -45,6 +47,19 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
         await mutate((files) => files!.filter((f) => f.key !== file.key), false);
 
         deleteFiles(uuid, directory, [file.name]).catch((error) => {
+            mutate();
+            clearAndAddHttpError({ key: 'files', error });
+        });
+
+        setShowConfirmation(false);
+    };
+
+    const doTrash = async () => {
+        clearFlashes('files');
+
+        await mutate((files) => files!.filter((f) => f.key !== file.key), false);
+        toast.info('Moving to trash...');
+        trashFile(uuid, directory, [file.name]).catch((error) => {
             mutate();
             clearAndAddHttpError({ key: 'files', error });
         });
@@ -171,6 +186,12 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
                         <HugeIconsDelete className='h-4! w-4!' fill='currentColor' />
                         <span>Delete</span>
+                    </ContextMenuItem>
+                </Can>
+                <Can action={'file.delete'}>
+                    <ContextMenuItem className='flex gap-2' onSelect={() => doTrash()}>
+                        <IconTrash className='h-4! w-4!' fill='currentColor' />
+                        <span>Move to Trash</span>
                     </ContextMenuItem>
                 </Can>
             </ContextMenuContent>
